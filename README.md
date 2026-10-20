@@ -1,8 +1,7 @@
 # LP Salário-Maternidade — Dra. Halia Georgete Lima Pimenta · OAB/MA 19.117
 
-> ⚠️ Esta LP foi originalmente construída para outro advogado e migrada para a Dra. Halia.
-> Dados pendentes e o que ainda falta: **[DADOS-CLIENTE.md](DADOS-CLIENTE.md)**.
-> A seção de provas sociais foi **removida** — ver o alerta no §5 daquele arquivo.
+> Landing page de direct response, mobile first, com o quiz como ferramenta central de conversão
+> e qualificação. Dados do cliente e pendências em `DADOS-CLIENTE.md` (fora do repositório).
 
 Landing page de **direct response**, mobile first, com o quiz como ferramenta central de
 conversão e qualificação.
@@ -13,11 +12,35 @@ conversão e qualificação.
 | `styles.css` | Estilos |
 | `script.js` | Quiz, UTM, rastreamento, interações |
 | `politica-privacidade.html` | Política de Privacidade (LGPD) |
+| `termos-de-uso.html` | Termos de Uso |
+| `vercel.json` | Cache e headers de segurança |
 | `img/logo.png` | Brasão MP — header, rodapé e favicon |
 | `img/halia.jpg` | Retrato da Dra. Halia — seção "A advogada" |
-| `ESTRUTURA.md` · `COPY.md` · `DADOS-CLIENTE.md` · `DESIGN.md` | Documentação do projeto |
 
-Deploy: arrastar a pasta na Vercel. Sem build.
+A documentação de projeto (`ESTRUTURA.md`, `COPY.md`, `DADOS-CLIENTE.md`, `DESIGN.md`) fica fora
+do repositório por conter dados do cliente — está apenas na pasta local.
+
+---
+
+## Deploy
+
+Repositório git já inicializado em `main`, com o primeiro commit pronto. O `.gitignore` deixa de
+fora a documentação interna (`ESTRUTURA.md`, `COPY.md`, `DADOS-CLIENTE.md`, `DESIGN.md`), a pasta
+`.claude/` e as cópias soltas das imagens na raiz. Vão para o servidor 10 arquivos, 268 KB.
+
+**1.** Criar um repositório vazio no GitHub — sem README, sem .gitignore, sem licença.
+
+**2.** Na pasta `D:\LP`:
+
+```bash
+git remote add origin https://github.com/SEU-USUARIO/NOME-DO-REPO.git
+git push -u origin main
+```
+
+**3.** Na Vercel: *Add New → Project → Import Git Repository*. Framework **Other**, sem build
+command, output directory na raiz. O `vercel.json` já cuida de cache e headers de segurança.
+
+Sem build step — é HTML, CSS e JS estáticos.
 
 ---
 
@@ -29,6 +52,7 @@ Reorganizada para conversão. A identidade visual não mudou.
 Marquee → Header (só marca no mobile)
 Hero .................. promessa + prazo + CTA        ← dobra
 Duplo benefício ....... por que pode haver dois
+Depoimentos ........... 4 relatos reais de clientes
 Como funciona ......... 3 passos
 A advogada ............ Dra. Halia + provas curtas
 Dúvidas ............... 7 objeções
@@ -39,7 +63,7 @@ Rodapé
 
 **Saiu:** "Quem tem direito" (os painéis viraram o próprio quiz), "Por que deixam de receber",
 "Pedido negado" como seção (virou ramo do quiz + FAQ), "Por que contar com a gente" (virou lista
-curta dentro de Quem somos). FAQ de 11 para 7. Passos de 4 para 3.
+curta dentro de "A advogada"). FAQ de 11 para 7. Passos de 4 para 3.
 
 **Entrou:** barra fixa de CTA no mobile, chips de prova no hero, tela de análise no quiz.
 
@@ -72,7 +96,7 @@ São **3 ou 4 perguntas** conforme o caminho. As duas perguntas extras não exis
 
 - **"Para quando é o parto?"** segmenta urgência. Resposta "neste mês" marca o lead como
   prioritário na tela final e no evento `qualified`.
-- **"Tem a carta de negativa?"** define se a Luana consegue ler o motivo real da recusa já na
+- **"Tem a carta de negativa?"** define se a Dra. Halia consegue ler o motivo real da recusa já na
   primeira conversa.
 
 **UX implementada:** uma pergunta por tela · cards de 68px no mobile · avanço automático no
@@ -127,7 +151,7 @@ Anúncio pode abrir o quiz direto com `?quiz=1` ou `#quiz`.
 
 ## 4. Rastreamento
 
-`CFG.pixelId` no `script.js` — **trocar `PIXEL_ID` pelo ID real**. Todo evento vai para o
+`CFG.pixelId` no `script.js` — Pixel **1887940685517084**. Todo evento vai para o
 `dataLayer` (GTM) e para o `fbq` (Pixel).
 
 ### Eventos que você pediu
@@ -159,10 +183,14 @@ Todos carregam `utm_source`, `utm_campaign` e `utm_content` junto.
 
 ### Eventos padrão do Meta
 
-`qualified → Lead` · `whatsapp_click → Contact` · `quiz_start → ViewContent`
+`whatsapp_click → Lead` · `whatsapp_bypass → Lead` · `quiz_start → ViewContent`
 
-**Otimize as campanhas para `Lead`**, não para PageView. E como o WhatsApp é uma saída para fora
-do site, `Contact` é o sinal mais próximo da conversão real que o Pixel consegue ver.
+**Otimize as campanhas para `Lead`**, não para PageView.
+
+O `Lead` dispara **só quando a pessoa sai para o WhatsApp** — inclusive pelo atalho "prefiro
+falar direto", que também é lead. Chegar na tela de resultado (`qualified`) não dispara Lead:
+parte das pessoas para ali sem clicar, e contar isso como conversão ensinaria o Meta a otimizar
+para o sinal errado.
 
 ### ⚠️ Consentimento vs. volume de eventos
 
