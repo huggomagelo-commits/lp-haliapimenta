@@ -1,0 +1,19 @@
+# Documentação interna do projeto — não precisa ir para o servidor
+ESTRUTURA.md
+COPY.md
+DADOS-CLIENTE.md
+DESIGN.md
+
+# ferramentas locais
+.claude/
+
+# imagens soltas na raiz — as que valem estão em img/
+/halia.jpg
+/logo.png
+
+# temporários
+_*.html
+_*.py
+*.mp4
+.DS_Store
+Thumbs.db

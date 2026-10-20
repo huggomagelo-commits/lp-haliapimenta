@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Salário-Maternidade | Verifique se você tem direito — Dra. Halia Pimenta, OAB/MA 19.117</title>
+<meta name="description" content="Você pode ter direito ao salário-maternidade e, em alguns casos, a um segundo benefício. Verifique sua situação em menos de 1 minuto, sem informar nome nem documento.">
+<meta name="theme-color" content="#0F0F11">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Você pode ter direito a dois salários-maternidade">
+<meta property="og:description" content="Verifique sua situação em menos de 1 minuto. Sem nome, telefone ou documento.">
+<link rel="icon" href="img/logo.png" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- 3 faces apenas (era 5). Cada face a menos é ~15KB e um request de fonte a menos no mobile. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Playfair+Display:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Playfair+Display:wght@600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Playfair+Display:wght@600&display=swap"></noscript>
+<link rel="stylesheet" href="styles.css">
+
+<!-- Meta Pixel: o carregador fica em script.js e só dispara após consentimento.
+     Trocar PIXEL_ID lá. Ver README > Rastreamento. -->
+</head>
+<body>
+
+<div class="progresso" id="progresso"></div>
+
+<div class="marquee"><div class="marquee-track" id="mq"></div></div>
+
+<!-- ===================== HEADER ===================== -->
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="#topo">
+      <!-- O <i> é fallback: some via :has(img) quando a logo carrega e volta
+           sozinho se o arquivo não existir (onerror remove a <img>). -->
+      <span class="marca-selo" aria-hidden="true">
+        <i>H</i>
+        <img src="img/logo.png" width="256" height="256" alt="" onerror="this.remove()">
+      </span>
+      <span class="marca-txt"><b>Halia Pimenta</b><small>Advocacia Previdenciária</small></span>
+    </a>
+    <!-- Menu só no desktop: numa LP de tráfego pago, link de navegação é rota de fuga. -->
+    <nav class="menu">
+      <a href="#entenda">O duplo benefício</a>
+      <a href="#prova">Depoimentos</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#sobre">A advogada</a>
+      <a href="#duvidas">Dúvidas</a>
+    </nav>
+    <button type="button" class="btn btn-cta" data-quiz="header">Verificar minha situação</button>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="topo">
+  <div class="wrap">
+    <div class="hero__content">
+      <p class="eyebrow">Salário-Maternidade · OAB/MA 19.117</p>
+
+      <h1>Você pode ter direito a <em>dois salários-maternidade</em>.</h1>
+
+      <p class="hero-lead">A maioria das mães recebe só um. Em alguns casos existe um segundo
+      benefício — e ele pode passar de <strong>R$&nbsp;6.000</strong>.</p>
+
+      <ul class="hero-pontos">
+        <li><span>120</span> dias de benefício pago pelo INSS</li>
+        <li><span>2º</span> benefício possível em alguns casos</li>
+        <li><span>5</span> anos é o prazo máximo para pedir</li>
+      </ul>
+
+      <div class="cta-bloco">
+        <button type="button" class="btn btn-grande btn-cta" data-quiz="hero">
+          Verificar minha situação
+        </button>
+        <p class="nota">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          Leva menos de 1 minuto · Sem nome, telefone ou documento
+        </p>
+      </div>
+
+      <p class="urgencia">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+        <span>O direito prescreve em <strong>5 anos</strong> após o nascimento. Depois disso o INSS não aceita mais o pedido.</span>
+      </p>
+
+      <p class="lgpd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6z"/></svg>
+        Atendimento sigiloso · Dados tratados conforme a LGPD
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DUPLO BENEFÍCIO ===================== -->
+<section id="entenda" class="duplo">
+  <div class="wrap centro reveal">
+    <div class="orn"><i></i></div>
+    <p class="eyebrow">Por que dois</p>
+    <h2 class="tit">Quando existem dois vínculos, pode haver dois benefícios</h2>
+
+    <div class="duplo-grid">
+      <div class="card-benef">
+        <p class="ordem"><b>1º</b> Pago pela empresa</p>
+        <h4>Vínculo CLT</h4>
+        <p>Carteira assinada: a empresa paga durante a licença. É o que quase toda gestante já conhece.</p>
+        <span class="selo ok">✓ Garantido pela CLT</span>
+      </div>
+
+      <div class="mais">+</div>
+
+      <div class="card-benef">
+        <p class="ordem"><b>2º</b> Pago pela Previdência</p>
+        <h4>Contribuinte individual</h4>
+        <p>Se além do emprego você também contribui como MEI ou autônoma, pode haver um segundo benefício.</p>
+        <span class="selo dep">⚠ Depende do seu caso</span>
+      </div>
+    </div>
+
+    <p class="aviso-honesto"><strong>Importante:</strong> o segundo benefício existe em casos
+    específicos, com dois vínculos reais e simultâneos. Não é a situação da maioria. Mas o
+    salário-maternidade é um direito em muitas outras situações — e a verificação diz em qual
+    você está.</p>
+
+    <button type="button" class="btn btn-cta" data-quiz="duplo">Verificar minha situação</button>
+  </div>
+</section>
+
+<!-- ===================== PROVA ===================== -->
+<section id="prova" class="depo">
+  <div class="wrap centro reveal">
+    <p class="eyebrow">Quem já recebeu</p>
+    <h2 class="tit">O que dizem as mães que atendi</h2>
+    <p class="sub">Relatos enviados por clientes no WhatsApp, publicados com autorização.</p>
+
+    <div class="grade-depo">
+      <div class="depo-card">
+        <div class="estrelas">★★★★★</div>
+        <p>“Foi muito maravilhoso e gratificante trabalhar com a Matos Pimenta Advocacia, foi
+        tudo tranquilo, <strong>me deram uma confiança muito boa</strong>. Sou muito grata por me
+        ajudarem.”</p>
+        <div class="depo-rodape">
+          <div class="avatar">K</div>
+          <div><b>Kawanny V.</b><span class="origem-ig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2"/></svg> WhatsApp</span></div>
+        </div>
+      </div>
+
+      <div class="depo-card">
+        <div class="estrelas">★★★★★</div>
+        <p>“Foi excelente! <strong>Entregaram um trabalho perfeito</strong> e me ajudaram muito.”</p>
+        <div class="depo-rodape">
+          <div class="avatar">S</div>
+          <div><b>Selenny</b><span class="origem-ig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2"/></svg> WhatsApp</span></div>
+        </div>
+      </div>
+
+      <div class="depo-card">
+        <div class="estrelas">★★★★★</div>
+        <p>“Muito obrigada pelo atendimento, amei. <strong>Vocês são umas pessoas incríveis</strong>,
+        obrigada por todo carinho e paciência.”</p>
+        <div class="depo-rodape">
+          <div class="avatar">N</div>
+          <div><b>Nathalia B.</b><span class="origem-ig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2"/></svg> WhatsApp</span></div>
+        </div>
+      </div>
+
+      <div class="depo-card">
+        <div class="estrelas">★★★★★</div>
+        <p>“Foi maravilhosa. <strong>O melhor atendimento.</strong>”</p>
+        <div class="depo-rodape">
+          <div class="avatar">A</div>
+          <div><b>Amanda G.</b><span class="origem-ig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2"/></svg> WhatsApp</span></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="depo-dica">← arraste para ver mais →</p>
+    <p class="nota-depo">Relatos espontâneos sobre a experiência de atendimento. Os resultados
+    variam conforme o histórico contributivo e a análise individual de cada caso pelo INSS.</p>
+  </div>
+</section>
+
+<!-- ===================== COMO FUNCIONA ===================== -->
+<section id="como-funciona" class="passos">
+  <div class="wrap centro reveal">
+    <p class="eyebrow">Como funciona</p>
+    <h2 class="tit">Do clique ao pedido protocolado</h2>
+
+    <div class="grade-passos tres">
+      <div class="passo">
+        <div class="n">01</div>
+        <h4>Você verifica sua situação</h4>
+        <p>Aqui mesmo, em menos de um minuto. Sem nome, telefone nem documento.</p>
+      </div>
+      <div class="passo">
+        <div class="n">02</div>
+        <h4>Eu te chamo no WhatsApp</h4>
+        <p>Suas respostas vão junto. Você não precisa contar sua história do zero.</p>
+      </div>
+      <div class="passo">
+        <div class="n">03</div>
+        <h4>Cuido do seu pedido</h4>
+        <p>Leio seu CNIS, organizo os documentos e acompanho até o fim.</p>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-cta" data-quiz="como_funciona">Verificar minha situação</button>
+    <p class="nota">Conversa inicial sem compromisso</p>
+  </div>
+</section>
+
+<!-- ===================== SOBRE ===================== -->
+<section id="sobre" class="sobre-escuro">
+  <div class="wrap">
+    <div class="sobre-grid reveal">
+      <figure class="retrato">
+        <img src="img/halia.jpg" width="707" height="884" loading="lazy" decoding="async"
+             alt="Dra. Halia Georgete Lima Pimenta, advogada previdenciária, OAB/MA 19.117">
+        <figcaption>
+          <b>Dra. Halia Georgete Lima Pimenta</b>
+          <span>OAB/MA 19.117</span>
+        </figcaption>
+      </figure>
+
+      <div>
+        <p class="eyebrow">A advogada</p>
+        <h2 class="tit">Você fala comigo, não com atendente</h2>
+        <p class="autoridade-linha">Dra. Halia Georgete Lima Pimenta — OAB/MA 19.117 — Direito Previdenciário</p>
+
+        <p class="txt">Sou a <strong>Halia</strong>, advogada previdenciária. Eu mesma te recebo no
+        WhatsApp: entendo o seu caso, organizo a documentação e explico cada etapa em português,
+        sem juridiquês. Você não vai falar com robô nem repetir sua história para três pessoas
+        diferentes.</p>
+
+        <p class="txt">Eu confiro o seu CNIS antes de pedir qualquer coisa ao INSS. É lá que
+        aparecem os vínculos, as contribuições e a sua qualidade de segurada — e é lá que a maioria
+        dos pedidos se perde por um detalhe.</p>
+
+        <ul class="mini-provas">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg> Atendimento 100% online, para todo o Brasil</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg> A papelada fica por minha conta</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg> Pelos canais oficiais do INSS, sem atalho</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg> Honorários explicados antes de qualquer decisão</li>
+        </ul>
+
+        <button type="button" class="btn btn-cta" data-quiz="sobre">Verificar minha situação</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section id="duvidas" class="faq">
+  <div class="wrap centro reveal">
+    <p class="eyebrow">Dúvidas</p>
+    <h2 class="tit">Antes de você perguntar</h2>
+
+    <div class="faq-lista">
+      <details>
+        <summary>Estou grávida e desempregada. Posso receber?</summary>
+        <p class="resp">Pode. Quem saiu de um emprego com carteira assinada continua protegida pelo
+        período de graça, que em regra dura 12 meses. Se o parto acontecer dentro desse prazo, o
+        direito costuma existir.</p>
+      </details>
+      <details>
+        <summary>Só contribuí uma vez. É suficiente?</summary>
+        <p class="resp">Pode ser. Hoje o salário-maternidade é isento de carência para todas as
+        categorias de seguradas. O que se analisa é a qualidade de segurada na data do parto.</p>
+      </details>
+      <details>
+        <summary>O INSS já negou meu pedido. Dá para reverter?</summary>
+        <p class="resp">Em muitos casos sim. A negativa costuma vir de documento faltando, guia
+        recolhida em código errado ou vínculo que não apareceu no CNIS — não de ausência de direito.</p>
+      </details>
+      <details>
+        <summary>Quanto eu posso receber?</summary>
+        <p class="resp">Depende do seu histórico de contribuições. Em alguns casos o segundo
+        benefício passa de R$ 6.000, mas eu não estimo valor sem antes olhar o seu CNIS.</p>
+      </details>
+      <details>
+        <summary>Isso é legal? Posso ter algum problema?</summary>
+        <p class="resp">Sim, é totalmente legal. O benefício está previsto em lei e o pedido é feito
+        pelos canais oficiais do INSS. Contratar advogado é um direito seu e não gera pendência.</p>
+      </details>
+      <details>
+        <summary>Quanto custa?</summary>
+        <p class="resp">A conversa inicial é sem compromisso. Os honorários são explicados de forma
+        clara antes de qualquer decisão, dentro dos parâmetros da tabela da OAB.</p>
+      </details>
+      <details>
+        <summary>Meus dados ficam guardados?</summary>
+        <p class="resp">A verificação não pede nome, telefone nem documento, e nenhuma resposta é
+        armazenada. Elas apenas montam o texto da mensagem no seu próprio WhatsApp. Veja a
+        <a href="politica-privacidade.html">Política de Privacidade</a>.</p>
+      </details>
+    </div>
+
+    <button type="button" class="btn btn-cta" data-quiz="faq">Verificar minha situação</button>
+  </div>
+</section>
+
+<!-- ===================== CTA FINAL ===================== -->
+<section id="contato" class="cta-final">
+  <div class="wrap">
+    <div class="orn"><i></i></div>
+    <h2>Cada mês que passa é um mês a menos dentro do prazo.</h2>
+    <p>A verificação leva menos de um minuto e não pede nenhum dado seu.</p>
+    <button type="button" class="btn btn-grande btn-cta" data-quiz="cta_final">Verificar minha situação</button>
+    <p><a class="hedge" data-hedge="cta_final" href="https://wa.me/5598991338517" target="_blank" rel="noopener">Prefiro falar direto no WhatsApp →</a></p>
+  </div>
+</section>
+
+<!-- ===================== RODAPÉ ===================== -->
+<footer class="rodape">
+  <div class="wrap">
+    <div class="rod-grid">
+      <div class="rod-sobre">
+        <div class="marca marca-rodape">
+          <span class="marca-selo" aria-hidden="true">
+            <i>H</i>
+            <img src="img/logo.png" width="256" height="256" alt="" onerror="this.remove()">
+          </span>
+          <span class="marca-txt"><b>Halia Pimenta</b><small>Advocacia Previdenciária</small></span>
+        </div>
+        <p class="rod-oab">OAB/MA 19.117</p>
+        <p>Atuação dedicada ao salário-maternidade, com atendimento 100% online para gestantes e
+        mães de todo o Brasil.</p>
+      </div>
+
+      <div>
+        <h5>Contato</h5>
+        <ul class="rod-lista">
+          <li><i>✆</i><a href="https://wa.me/5598991338517" target="_blank" rel="noopener">(98) 99133-8517</a></li>
+          <li><i>◉</i><a href="https://www.instagram.com/m.p_advocacia/" target="_blank" rel="noopener">@m.p_advocacia</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Endereço</h5>
+        <p>Rua Miguel Moisés<br>Centro — Vitória do Mearim/MA<br>CEP 65350-000</p>
+      </div>
+
+      <div>
+        <h5>Institucional</h5>
+        <ul class="rod-lista">
+          <li><a href="politica-privacidade.html">Política de Privacidade</a></li>
+          <li><a href="termos-de-uso.html">Termos de Uso</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="rod-disc">Este é o site de um escritório de advocacia privado e independente. Não
+    possuímos qualquer vínculo, parceria, autorização ou afiliação com o Instituto Nacional do
+    Seguro Social (INSS), com o portal gov.br ou com qualquer órgão público, bem como com as
+    plataformas de anúncios Google ou Meta. O conteúdo aqui exposto tem caráter puramente
+    informativo.</p>
+
+    <p class="rod-fim">
+      Halia Georgete Lima Pimenta Sociedade Individual de Advocacia · CNPJ 48.595.624/0001-25 · OAB/MA 19.117<br>
+      Este site não promete ou garante resultados. Cada caso é analisado individualmente e o
+      direito ao benefício depende do enquadramento legal de cada gestante.
+    </p>
+  </div>
+</footer>
+
+<!-- ===================== BARRA FIXA (MOBILE) ===================== -->
+<div class="barra-fixa" id="barraFixa">
+  <button type="button" class="btn btn-cta" data-quiz="barra_fixa">Verificar minha situação</button>
+  <span>Menos de 1 minuto · sem dados pessoais</span>
+</div>
+
+<!-- ===================== QUIZ ===================== -->
+<div class="sq-modal" id="sqModal" role="dialog" aria-modal="true" aria-labelledby="sqTitulo">
+  <div class="sq-painel">
+    <div class="sq-topo">
+      <div class="sq-medidor">
+        <div class="sq-barra"><i id="sqBarra"></i></div>
+        <span id="sqPct">Análise 0% concluída</span>
+      </div>
+      <button type="button" class="sq-fechar" id="sqFechar" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="sq-corpo" id="sqCorpo"></div>
+    <div class="sq-rodape">
+      Não guardamos nenhuma das suas respostas · <a href="politica-privacidade.html">Privacidade</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COOKIES ===================== -->
+<div class="cookie" id="cookieBanner">
+  <p>Usamos cookies para medir nossas campanhas. Os essenciais são sempre necessários; os demais
+  dependem da sua escolha. <a href="politica-privacidade.html">Saiba mais</a>.</p>
+  <div class="cookie-acoes">
+    <button type="button" class="btn recusar" id="ckRecusar">Somente essenciais</button>
+    <button type="button" class="btn" id="ckAceitar">Aceitar todos</button>
+  </div>
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
