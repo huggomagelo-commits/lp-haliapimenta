@@ -122,8 +122,34 @@ são propagados nos links internos.
 Mesclar fazia o `utm_content` de um anúncio antigo vazar para a atribuição do anúncio atual.
 Foi um bug real, pego no teste.
 
-Sem UTM na URL, o `referrer` vira a origem (`google.com`, `direto`) para não ficar cego no
-orgânico.
+### ⚠️ A UTM precisa estar na URL do anúncio
+
+**Chrome, Brave, Firefox e Safari apagam o `fbclid` da URL antes da página carregar.** Testado
+na própria LP: enviando `?fbclid=ABC123&teste=xyz`, o que chega é `?teste=xyz`.
+
+Se o anúncio mandar só o `fbclid`, não chega nada — e o navegador in-app do Instagram
+normalmente também não envia referrer. Sem UTM explícita, tráfego pago vira "sem origem".
+
+**Por isso a URL do anúncio precisa carregar as UTMs**, sempre.
+
+### Dedução de origem quando falta UTM
+
+Quando `utm_source` não vem na URL, a origem é deduzida em cascata:
+
+| Situação | Resultado |
+|---|---|
+| Navegador in-app do Instagram (user agent) | `instagram / social_inapp` |
+| Navegador in-app do Facebook (`FBAN`, `FBAV`) | `facebook / social_inapp` |
+| `fbclid` sobreviveu | `facebook / paid_sem_utm` |
+| `gclid` presente | `google / paid_sem_utm` |
+| Tem referrer | `<dominio> / referral` |
+| Nada identificável | `desconhecido / desconhecido` |
+
+A detecção por user agent é o que salva o caso mais comum: anúncio do Meta aberto no navegador
+interno do app, sem fbclid e sem referrer.
+
+**"desconhecido", não "direto".** Rotular de direto o que não se consegue identificar faz
+tráfego pago parecer orgânico no relatório — é pior que admitir a ignorância.
 
 ### ⚠️ A origem aparece na mensagem do WhatsApp
 

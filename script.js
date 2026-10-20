@@ -65,11 +65,34 @@ var UTM = (function () {
     if (v) dados[c] = v.slice(0, 120);
   });
 
-  /* Primeira visita sem UTM: registra a origem para não ficar cego no orgânico. */
-  if (!dados.utm_source && !dados.fbclid) {
+  /* Sem utm_source explícito, tenta deduzir a origem em três níveis.
+     Importante: Chrome, Brave, Firefox e Safari APAGAM o fbclid da URL antes
+     da página carregar. Se o anúncio só mandar fbclid, não chega nada aqui —
+     por isso a UTM precisa estar na URL do anúncio. */
+  if (!dados.utm_source) {
     var ref = document.referrer || "";
-    dados.utm_source = ref ? (ref.split("/")[2] || "direto") : "direto";
-    dados.utm_medium = ref ? "referral" : "direto";
+    var ua  = navigator.userAgent || "";
+
+    /* 1. Navegador in-app do Instagram/Facebook: o user agent entrega a origem
+          mesmo sem fbclid e sem referrer. */
+    if (/Instagram/i.test(ua)) {
+      dados.utm_source = "instagram"; dados.utm_medium = "social_inapp";
+    } else if (/FBAN|FBAV|FB_IAB/i.test(ua)) {
+      dados.utm_source = "facebook";  dados.utm_medium = "social_inapp";
+    /* 2. fbclid sobreviveu: veio de anúncio do Meta sem UTM configurada. */
+    } else if (dados.fbclid) {
+      dados.utm_source = "facebook";  dados.utm_medium = "paid_sem_utm";
+    } else if (dados.gclid) {
+      dados.utm_source = "google";    dados.utm_medium = "paid_sem_utm";
+    /* 3. Referrer, quando existe. */
+    } else if (ref) {
+      dados.utm_source = ref.split("/")[2] || "referral";
+      dados.utm_medium = "referral";
+    /* 4. Nada identificável. Não é "direto" — é desconhecido. Rotular de
+          direto faz tráfego pago parecer orgânico no relatório. */
+    } else {
+      dados.utm_source = "desconhecido"; dados.utm_medium = "desconhecido";
+    }
     novo = true;
   }
   if (novo) { try { sessionStorage.setItem(CHAVE, JSON.stringify(dados)); } catch (e) {} }
