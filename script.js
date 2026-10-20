@@ -432,7 +432,7 @@ var TELAS = {
       : '';
 
     pintar(
-      '<div class="sq-selo">✓</div>' +
+      '<p class="sq-selo">Resultado da verificação</p>' +
       '<h3 class="sq-res-tit">Seu caso pode se encaixar</h3>' +
       '<p class="sq-res-txt">Pelas suas respostas, vale a análise do seu histórico. Quem vai te ' +
       'responder é a <strong>equipe da Dra. Halia</strong>, OAB/MA 19.117. Suas respostas já vão ' +
@@ -484,7 +484,7 @@ var TELAS = {
 
 function saida(motivo, titulo, corpoHtml) {
   pintar(
-    '<div class="sq-selo alerta">!</div>' +
+    '<p class="sq-selo alerta">Resultado da verificação</p>' +
     '<h3 class="sq-res-tit">' + titulo + '</h3>' + corpoHtml +
     '<a class="btn" id="sqInsta" href="' + CFG.instagram + '" target="_blank" rel="noopener" ' +
     'data-motivo="' + motivo + '">Acompanhar no Instagram</a>' +
@@ -570,21 +570,12 @@ document.addEventListener("DOMContentLoaded", function () {
    ======================================================================== */
 function iniciarPagina() {
 
-  /* --- marquee --- */
-  var itens = ["Salário-maternidade", "Atendimento em todo o Brasil", "OAB/MA 19.117",
-               "100% online", "Sem juridiquês"];
-  var mq = document.getElementById("mq");
-  if (mq) {
-    var h = itens.map(function (t) { return "<span>" + t + "</span>"; }).join("");
-    mq.innerHTML = h + h + h;
-  }
-
   /* --- reveal com stagger --- */
   document.querySelectorAll(".reveal").forEach(function (bloco) {
-    bloco.querySelectorAll(".card-benef, .depo-card, .passo, .mini-provas li")
+    bloco.querySelectorAll(".via, .citacao, .etapa, .compromissos li")
       .forEach(function (fi, i) {
         fi.classList.add("reveal");
-        fi.style.setProperty("--d", Math.min(i * 70, 350) + "ms");
+        fi.style.setProperty("--d", Math.min(i * 60, 260) + "ms");
       });
   });
   var alvos = document.querySelectorAll(".reveal");
@@ -600,7 +591,6 @@ function iniciarPagina() {
   }
 
   /* --- barra de progresso, header compacto, barra fixa, scroll depth --- */
-  var prog = document.getElementById("progresso");
   var topo = document.querySelector(".topo");
   var fixa = document.getElementById("barraFixa");
   var hero = document.querySelector(".hero");
@@ -611,7 +601,6 @@ function iniciarPagina() {
     var total = d.scrollHeight - d.clientHeight;
     var y = window.scrollY;
 
-    if (prog && total > 0) prog.style.width = ((y / total) * 100) + "%";
     if (topo) topo.classList.toggle("compacto", y > 60);
 
     /* A barra fixa entra depois que o CTA do hero sai da tela. */
