@@ -436,7 +436,7 @@ var TELAS = {
       '<h3 class="sq-res-tit">Seu caso pode se encaixar</h3>' +
       '<p class="sq-res-txt">Pelas suas respostas, vale a análise do seu histórico. Quem vai te ' +
       'responder é a <strong>equipe da Dra. Halia</strong>, OAB/MA 19.117. Suas respostas já vão ' +
-      'junto na mensagem — você não precisa repetir nada.</p>' + urg +
+      'junto na mensagem, você não precisa repetir nada.</p>' + urg +
       '<div class="sq-lista-doc"><p>Se já tiver em mãos, vale separar:</p><ul>' + docs + '</ul></div>' +
       '<a class="btn btn-grande" id="sqWhats" href="' + link + '" target="_blank" rel="noopener">' +
       'Falar no WhatsApp</a>' +
@@ -496,7 +496,7 @@ function horario() {
   var d = new Date(), dia = d.getDay(), h = d.getHours();
   return (dia >= 1 && dia <= 5 && h >= CFG.horaInicio && h < CFG.horaFim)
     ? "Atendimento de segunda a sexta, das 8h às 18h."
-    : "Fora do horário de atendimento. Pode mandar agora — a equipe responde no próximo dia útil, a partir das 8h.";
+    : "Fora do horário de atendimento. Pode mandar agora, a equipe responde no próximo dia útil, a partir das 8h.";
 }
 
 function ir(tela, valor) {
