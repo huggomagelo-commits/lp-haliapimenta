@@ -102,6 +102,15 @@ var UTM = (function () {
 window.dataLayer = window.dataLayer || [];
 
 var PIXEL_PRONTO = false;
+var PAGE_VIEW_ENVIADO = false;
+
+/* Sem consentimento o page_view sai só para o dataLayer; se a pessoa aceitar
+   depois, o Pixel carrega e tentaria mandar de novo. Uma flag resolve. */
+function pageViewUmaVez() {
+  if (PAGE_VIEW_ENVIADO) return;
+  PAGE_VIEW_ENVIADO = true;
+  track("page_view", {}, true);
+}
 
 function carregarPixel() {
   if (PIXEL_PRONTO || !CFG.pixelId || CFG.pixelId.length < 10) return;
@@ -115,7 +124,7 @@ function carregarPixel() {
   fbq("init", CFG.pixelId);
   PIXEL_PRONTO = true;
   fbq("track", "PageView");
-  track("page_view", {}, true);
+  pageViewUmaVez();
 }
 
 /* nome: evento custom. padrao: evento padrão do Meta, quando existir equivalente. */
@@ -274,7 +283,7 @@ var TELAS = {
     ir(Q.resp.gravida ? "parto" : "inss");
   },
 
-  /* Só para grávidas: segmenta urgência e ajuda a Dra. Halia a priorizar. */
+  /* Só para grávidas: segmenta urgência e ajuda a equipe a priorizar. */
   parto: function () {
     Q.ultimoPasso = 3;
     pintar(
@@ -403,11 +412,11 @@ var TELAS = {
       '<div class="sq-selo">✓</div>' +
       '<h3 class="sq-res-tit">Seu caso pode se encaixar</h3>' +
       '<p class="sq-res-txt">Pelas suas respostas, vale a análise do seu histórico. Quem vai te ' +
-      'responder é a <strong>Dra. Halia</strong>, OAB/MA 19.117. Suas respostas já vão junto na ' +
-      'mensagem — você não precisa repetir nada.</p>' + urg +
+      'responder é a <strong>equipe da Dra. Halia</strong>, OAB/MA 19.117. Suas respostas já vão ' +
+      'junto na mensagem — você não precisa repetir nada.</p>' + urg +
       '<div class="sq-lista-doc"><p>Se já tiver em mãos, vale separar:</p><ul>' + docs + '</ul></div>' +
       '<a class="btn btn-grande" id="sqWhats" href="' + link + '" target="_blank" rel="noopener">' +
-      'Falar com a Dra. Halia no WhatsApp</a>' +
+      'Falar no WhatsApp</a>' +
       '<p class="sq-horario">' + horario() + '</p>' +
       '<button type="button" class="sq-voltar" data-reiniciar>Refazer a verificação</button>',
       100, { rotulo: "Análise concluída" });
@@ -423,8 +432,8 @@ var TELAS = {
       'geralmente não aceita mais o pedido.</p>' +
       '<p class="sq-res-txt">Isso não significa que você não tenha direito a nada. Existem outros ' +
       'benefícios do INSS que olham para a sua situação <strong>de hoje</strong>, e não para o passado.</p>' +
-      '<p class="sq-res-txt">No meu Instagram eu falo sobre aposentadorias, pensões e os demais ' +
-      'benefícios do INSS.</p>');
+      '<p class="sq-res-txt">No nosso Instagram a gente fala sobre aposentadorias, pensões e os ' +
+      'demais benefícios do INSS.</p>');
   },
 
   saida_sem_vinculo: function () {
@@ -435,7 +444,7 @@ var TELAS = {
       '<p class="sq-res-txt">O salário-maternidade vem do INSS. Para recebê-lo é preciso ter ' +
       'contribuído em algum momento, nem que seja por pouco tempo.</p>' +
       '<p class="sq-res-txt"><strong>Mas existem benefícios feitos justamente para quem nunca ' +
-      'contribuiu</strong>, como o BPC/LOAS. No meu Instagram eu explico quem pode receber.</p>');
+      'contribuiu</strong>, como o BPC/LOAS. No nosso Instagram a gente explica quem pode receber.</p>');
   },
 
   saida_antes: function () {
@@ -464,7 +473,7 @@ function horario() {
   var d = new Date(), dia = d.getDay(), h = d.getHours();
   return (dia >= 1 && dia <= 5 && h >= CFG.horaInicio && h < CFG.horaFim)
     ? "Atendimento de segunda a sexta, das 8h às 18h."
-    : "Fora do horário de atendimento. Pode mandar agora — a Dra. Halia responde no próximo dia útil, a partir das 8h.";
+    : "Fora do horário de atendimento. Pode mandar agora — a equipe responde no próximo dia útil, a partir das 8h.";
 }
 
 function ir(tela, valor) {
@@ -625,7 +634,7 @@ function iniciarPagina() {
   } else if (banner && !escolha) {
     banner.classList.add("aberto");
   }
-  if (!window.fbq) track("page_view", {}, true);
+  pageViewUmaVez();
 
   function decidir(v) {
     try { localStorage.setItem(CHAVE, v); } catch (e) {}
