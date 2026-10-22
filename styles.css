@@ -121,23 +121,36 @@ section{padding:clamp(72px,9vw,124px) 0}
   transition:padding .25s ease}
 .topo.compacto .wrap{padding-top:12px;padding-bottom:12px}
 
-/* Lockup da marca. O selo antes parecia adesivo colado: cantos arredondados,
-   grafite diferente da tinta do texto e folga grande entre ele e o nome.
-   Agora é quadrado puro, na mesma tinta dos títulos, encostado no texto e
-   separado por um filete vertical — lê como uma assinatura só. */
+/* Lockup da marca, sem caixa.
+   O brasão é dourado sobre transparente: solto no creme ele sumiria, e foi
+   por isso que existia a caixa escura. A solução é monocromática — filter
+   brightness(0) zera a cor e preserva o alfa, transformando o traço em
+   tinta sólida. Mesma silhueta, contraste alto, nenhum arquivo novo.
+   Nas seções escuras o filtro sai e o dourado original volta. */
 .marca{flex-shrink:0;text-decoration:none;color:var(--tinta);
-  display:flex;align-items:stretch;gap:0}
+  display:flex;align-items:center;gap:0}
 .marca-selo{
-  width:42px;flex-shrink:0;display:grid;place-items:center;
-  background:var(--tinta);border-radius:0;position:relative;
+  width:46px;height:46px;flex-shrink:0;display:grid;place-items:center;
+  background:none;border-radius:0;position:relative;
 }
-.marca-selo img{width:28px;height:28px;object-fit:contain;display:block}
+.marca-selo img{
+  width:46px;height:46px;object-fit:contain;display:block;
+  filter:brightness(0);opacity:.92;
+}
 .marca-selo i{font-family:var(--disp);font-style:normal;font-weight:600;
-  font-size:20px;color:var(--ouro-cl);line-height:1}
+  font-size:24px;color:var(--tinta);line-height:1}
 .marca-selo:has(img) i{display:none}
+.sec-escura .marca-selo img,.cta-final .marca-selo img{filter:none;opacity:1}
+.sec-escura .marca-selo i,.cta-final .marca-selo i{color:var(--ouro-cl)}
+.topo.compacto .marca-selo,.topo.compacto .marca-selo img{width:40px;height:40px}
+.rodape .marca-selo,.rodape .marca-selo img{width:42px;height:42px}
+@media(max-width:640px){
+  .marca-selo,.marca-selo img{width:40px;height:40px}
+  .topo.compacto .marca-selo,.topo.compacto .marca-selo img{width:36px;height:36px}
+}
 .marca-txt{
   display:flex;flex-direction:column;justify-content:center;
-  padding-left:13px;margin-left:13px;border-left:1px solid var(--linha-2);
+  padding-left:14px;margin-left:14px;border-left:1px solid var(--linha-2);
 }
 .marca-txt b{
   font-family:var(--disp);font-weight:600;font-size:20px;line-height:1.05;
@@ -166,8 +179,18 @@ section{padding:clamp(72px,9vw,124px) 0}
 .hero{padding:clamp(60px,8vw,110px) 0 clamp(56px,7vw,92px)}
 /* O limite em ch vai no título, não no container: aplicado ao container ele
    usa o ch do corpo e espreme a coluna inteira. */
-.hero-texto{max-width:820px}
-.hero h1{max-width:15ch}
+.hero-texto{max-width:900px}
+/* O trecho sublinhado é nowrap; sem folga, o balanceador joga palavras
+   soltas nas linhas de cima. */
+.hero h1{max-width:21ch}
+
+/* Chamada do hero: é a ponte com o criativo do anúncio. Fala direto com a
+   gestante antes do título, para que ela se reconheça no primeiro segundo. */
+.chamada{
+  font-family:var(--disp);font-weight:600;
+  font-size:clamp(21px,2.6vw,29px);line-height:1.2;letter-spacing:-.008em;
+  color:var(--ouro);margin-bottom:14px;max-width:34ch;
+}
 
 .hero h1 em{font-style:normal;position:relative;white-space:nowrap}
 .hero h1 em::after{
