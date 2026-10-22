@@ -572,7 +572,7 @@ function iniciarPagina() {
 
   /* --- reveal com stagger --- */
   document.querySelectorAll(".reveal").forEach(function (bloco) {
-    bloco.querySelectorAll(".via, .citacao, .etapa, .compromissos li")
+    bloco.querySelectorAll(".via, .caso, .relato, .etapa, .compromissos-claro li")
       .forEach(function (fi, i) {
         fi.classList.add("reveal");
         fi.style.setProperty("--d", Math.min(i * 60, 260) + "ms");
