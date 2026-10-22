@@ -38,7 +38,19 @@ git push -u origin main
 ```
 
 **3.** Na Vercel: *Add New → Project → Import Git Repository*. Framework **Other**, sem build
-command, output directory na raiz. O `vercel.json` já cuida de cache e headers de segurança.
+command, output directory na raiz.
+
+### Cache
+
+Os arquivos têm nome fixo, sem build que gere hash. Cachear CSS e JS por tempo faz o HTML novo
+encontrar o CSS antigo depois de um deploy, e a página quebra para quem já visitou. Por isso
+`max-age=0, must-revalidate`: o navegador manda um condicional e recebe `304` quando nada mudou.
+Imagens ficam em 1 dia, já que a foto e a logo ainda podem ser trocadas.
+
+> ⚠️ **O `vercel.json` não aceita propriedades fora do schema.** Uma chave `comment` dentro de
+> `headers[]` faz a validação falhar e o deploy não acontece — silenciosamente, com check `0/1`
+> no commit do GitHub e o site continuando no build anterior. JSON não tem comentários; a
+> documentação das regras mora aqui.
 
 Sem build step — é HTML, CSS e JS estáticos.
 
