@@ -4,23 +4,21 @@
   "trailingSlash": false,
   "headers": [
     {
-      "comment": "CSS e JS revalidam sempre. Os nomes dos arquivos sao fixos (nao ha build com hash), entao cachear por tempo faz o HTML novo encontrar o CSS velho depois de um deploy - a pagina quebra. Com max-age=0 o navegador manda um condicional e recebe 304 quando nada mudou: custo baixo, correcao garantida.",
       "source": "/(.*)\\.(css|js)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     },
     {
-      "comment": "Imagens tambem tem nome fixo e podem ser trocadas (foto de estudio, logo em vetor). 1 dia e o teto aceitavel de defasagem.",
-      "source": "/img/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
-      ]
-    },
-    {
       "source": "/(.*)\\.html",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/img/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
       ]
     },
     {
