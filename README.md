@@ -61,26 +61,46 @@ com `.html` são redirecionados e mantêm a query string (UTM).
 ## 1. Hierarquia
 
 ```
-Header ................ marca + menu + CTA (no mobile, só a marca)
-Hero .................. chamada + promessa (dois salários) + CTA + atalho WhatsApp   ← dobra
-  faixa: base legal (Lei 8.213, arts. 71 a 73)
-Quem tem direito ...... 6 situações em que a mãe se reconhece
-  faixa: período de graça (art. 15)
+Header ................ marca + menu (seção atual marcada) + CTA
+                        mobile: ☰ no canto esquerdo + marca; o ☰ abre a barra lateral
+Hero .................. texto + CTA + 2 destaques  |  cartão da carta de concessão  ← dobra
+Números ............... faixa escura: 120 dias · 5 anos · 100% online · < 1 min (contam ao aparecer)
+Quem tem direito ...... 6 cartões com ícone
+O benefício ........... 2 cartões (CLT + contribuinte individual) ligados por "+" + ressalva
 Relatos ............... 4 depoimentos reais como mensagens de WhatsApp, em faixa contínua
-O benefício ........... comparativo de 2 vias (CLT x contribuinte individual) + ressalva
-Dúvida central ........ "Isso é legal? Posso ter algum problema?"
-  faixa: prazo de 5 anos (art. 103)
-Atendimento ........... 4 compromissos + 4 etapas
+Dúvida + base legal ... bloco escuro: "Isso é legal?" + cartão com arts. 71–73, 15 e 103
+Como funciona ......... 4 compromissos com ícone + 4 etapas ligadas por linha
+Verificação ........... 1ª pergunta do quiz na própria página
 A advogada ............ retrato com selo OAB + "Prazer, sou a Halia" + 3 selos + CTA
-Dúvidas ............... 5 perguntas
+Dúvidas ............... 5 perguntas com ícone +/−
 Rodapé ................ navegação, contato, institucional, bloco legal
 [ Barra fixa de CTA — mobile, entra ao sair do hero ]
 ```
 
 Toda seção termina com o mesmo CTA, "Verificar minha situação", que abre o quiz. Cada botão tem
-um `data-quiz` diferente, que vira o parâmetro `origem` no rastreamento.
+um `data-quiz` diferente, que vira o parâmetro `origem` no rastreamento (`header`, `hero`,
+`identificacao`, `beneficio`, `atendimento`, `advogada`, `faq`, `barra_fixa`, `menu`). A pergunta
+da seção Verificação usa `origem: verificacao_pagina` e abre o quiz já na 2ª pergunta.
 
 O menu do header funciona também como **sitelinks** nos anúncios.
+
+### Navegação
+
+- **Desktop:** menu no topo; o link da seção visível ganha sublinhado dourado (`.ativo`).
+- **Mobile:** o botão de três linhas, no canto superior esquerdo, abre uma barra lateral com as 8
+  seções numeradas, o CTA do quiz e o WhatsApp. Fecha no ×, no fundo escuro, com Esc ou ao
+  escolher um link. O foco fica preso no painel enquanto aberto e volta ao botão ao fechar; a
+  página não rola por trás. A seção atual aparece marcada também ali.
+
+### Carta de concessão no hero
+
+O cartão do hero mostra hoje um **documento ilustrativo** (linhas que se "escrevem" e um selo de
+check), com a legenda "A resposta que você procura". Ele não afirma caso nenhum.
+
+Quando a cliente enviar uma carta real (com nome, CPF e número do benefício tarjados, e
+autorização da segurada), salve como `img/caso-1.webp` e descomente a `<img>` indicada no
+`index.html`. O CSS detecta a imagem e troca sozinho: entra o selo **"Caso real"** e a legenda
+"Carta de concessão emitida".
 
 ---
 
@@ -237,6 +257,8 @@ lista `PERMITIDOS`.
 | `faq_open` | Abrir uma pergunta | `pergunta` | — |
 | `consentimento` | Aceite ou recusa de cookies | `escolha` | só dataLayer |
 | `relatos_interacao` | Arrastar ou usar as setas dos relatos (1ª vez por gesto) | `origem` (`arrastar`/`seta`) | só dataLayer |
+| `menu_abrir` | Abrir a barra lateral no mobile | — | só dataLayer |
+| `menu_navegar` | Escolher uma seção na barra lateral | `origem` (id da seção) | só dataLayer |
 
 Todos levam também `utm_source`, `utm_campaign` e `utm_content`.
 
@@ -276,7 +298,9 @@ risco de publicidade irregular além de queimar confiança.
 
 ## 6. Performance
 
-- Duas famílias de fonte, quatro pesos (Cormorant Garamond 500/600 + DM Sans 400/700)
+- Duas famílias de fonte (Cormorant Garamond 500/600 com itálico + DM Sans 400/700).
+  `font-variant-numeric: lining-nums` no body: sem isso a Cormorant desenha "120" como "I20"
+- Ícones em um sprite SVG inline (`<symbol>` + `<use>`), sem requisição extra
 - `preload` + carregamento não bloqueante das fontes
 - `script.js` com `defer`
 - Imagem com `width`/`height`, `loading="lazy"`, `decoding="async"` — sem CLS
@@ -287,22 +311,28 @@ risco de publicidade irregular além de queimar confiança.
 
 ### Movimento
 
-- **Hero:** entrada em cascata; o sublinhado de "dois salários-maternidade" se desenha
+- **Hero:** entrada em cascata; o termo-chave em itálico dourado ganha sublinhado que se desenha;
+  o cartão da carta entra inclinado e flutua devagar
+- **Números:** contam do zero quando a faixa aparece
+- **Cartões** (casos, benefício, compromissos, etapas): entram em cascata, sobem no hover; os
+  casos ganham uma barra dourada no topo e o ícone inverte de cor
 - **Relatos:** cada balão chega com "digitando…"; depois a faixa rola sozinha (28 px/s) em loop.
   Pausa com o mouse em cima e fora da tela; arrasta com dedo ou mouse; setas e teclado avançam
   uma mensagem. Os clones do loop ficam com `aria-hidden`
-- **Casos:** filete dourado se desenha no topo de cada um; estende no hover
-- **Etapas:** acendem uma a uma quando chegam a ~70% da altura da tela
+- **Etapas:** acendem uma a uma quando chegam a ~70% da altura da tela, e a linha que liga os
+  círculos avança junto (`--prog`)
 - **A advogada:** moldura dourada desliza para fora da foto, selo da OAB e selos entram em sequência
-- **FAQ:** resposta desliza ao abrir · **CTAs do quiz:** seta avança no hover
+- **FAQ:** ícone +/− gira; a resposta abre com altura animada onde o navegador suporta
+- **Botões:** seta avança e um brilho atravessa no hover
 
-Os estados iniciais das animações novas (relatos, etapas, foto da advogada) ficam sob a classe
-`.js` ou `.anima`, postas pelo script. Os blocos com `.reveal` dependem do script para aparecer,
-como já era antes. `prefers-reduced-motion` desliga tudo, inclusive a rolagem
-automática dos relatos.
+Itens de grade usam `.surge` (animação com fill `backwards`), não `.reveal` (transição): assim o
+transform da entrada não fica preso e o hover funciona. Os estados iniciais ficam sob `.js` ou
+`.anima`, postas pelo script. `prefers-reduced-motion` desliga tudo, inclusive a rolagem
+automática dos relatos e a contagem dos números.
 
-**Menu escondido no mobile.** Numa LP de tráfego pago, link de navegação é rota de fuga e custa
-espaço na primeira dobra. O CTA do header também sai no mobile — a barra fixa cumpre o papel.
+**Menu no mobile.** Antes ficava escondido para não abrir rota de fuga no tráfego pago. Agora
+fica atrás do botão de três linhas: não ocupa a primeira dobra e permite buscar uma seção a
+qualquer momento. O CTA do header continua fora no mobile — a barra fixa cumpre o papel.
 
 ---
 

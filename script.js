@@ -538,8 +538,18 @@ document.addEventListener("DOMContentLoaded", function () {
     var abre = alvo.closest("[data-quiz]");
     if (abre) {
       e.preventDefault();
+      fecharMenu();
       track("cta_click", { origem: abre.getAttribute("data-quiz") });
       return qAbrir(abre.getAttribute("data-quiz"));
+    }
+
+    /* Primeira pergunta exibida na própria página: abre o quiz já com a
+       resposta registrada, direto na pergunta seguinte. */
+    var vq = alvo.closest(".vq-op");
+    if (vq) {
+      track("cta_click", { origem: "verificacao_pagina" });
+      qAbrir("verificacao_pagina");
+      return ir("r_bebe", vq.getAttribute("data-v"));
     }
 
     var op = alvo.closest(".sq-op");
@@ -559,7 +569,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (insta) return track("instagram_redirect", { motivo: insta.getAttribute("data-motivo") });
 
     var hedge = alvo.closest("[data-hedge]");
-    if (hedge) return track("whatsapp_bypass", { origem: hedge.getAttribute("data-hedge") });
+    if (hedge) {
+      fecharMenu();
+      return track("whatsapp_bypass", { origem: hedge.getAttribute("data-hedge") });
+    }
 
     var wa = alvo.closest('a[href*="wa.me"]');
     if (wa) return track("whatsapp_click", { origem: wa.closest("footer") ? "rodape" : "pagina" });
@@ -569,6 +582,7 @@ document.addEventListener("DOMContentLoaded", function () {
   modal.addEventListener("click", function (e) { if (e.target === modal) qFechar(); });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && Q.aberto) qFechar();
+    else if (e.key === "Escape") fecharMenu();
   });
 
   /* Anúncio pode linkar direto para o quiz: ?quiz=1 ou #quiz */
@@ -584,15 +598,22 @@ document.addEventListener("DOMContentLoaded", function () {
    ======================================================================== */
 function iniciarPagina() {
 
-  /* --- reveal com stagger --- */
-  document.querySelectorAll(".reveal").forEach(function (bloco) {
-    bloco.querySelectorAll(".via, .caso, .etapa, .compromissos-claro li, .selos li")
-      .forEach(function (fi, i) {
-        fi.classList.add("reveal");
-        fi.style.setProperty("--d", Math.min(i * 60, 260) + "ms");
+  /* --- entradas ao rolar ---
+     .reveal: blocos inteiros. .surge: itens de grade, em cascata dentro do
+     grupo (ver comentário no CSS sobre o hover). */
+  var GRUPOS = [
+    [".cards-casos", ".card-caso"], [".comparativo", ".via"], [".compromissos", "li"],
+    [".etapas", ".etapa"], [".selos", "li"], [".numeros-grid", ".stat"]
+  ];
+  GRUPOS.forEach(function (g) {
+    document.querySelectorAll(g[0]).forEach(function (grupo) {
+      grupo.querySelectorAll(g[1]).forEach(function (el, i) {
+        el.classList.add("surge");
+        el.style.setProperty("--d", Math.min(i * 90, 450) + "ms");
       });
+    });
   });
-  var alvos = document.querySelectorAll(".reveal");
+  var alvos = document.querySelectorAll(".reveal, .surge");
   if (REDUZ || !("IntersectionObserver" in window)) {
     alvos.forEach(function (el) { el.classList.add("in"); });
   } else {
@@ -608,8 +629,21 @@ function iniciarPagina() {
   var topo = document.querySelector(".topo");
   var fixa = document.getElementById("barraFixa");
   var hero = document.querySelector(".hero");
+  var caixaEtapas = document.getElementById("etapas");
   var etapas = [].slice.call(document.querySelectorAll(".etapa"));
+  var totalEtapas = etapas.length, acesas = 0;
   var marcos = [25, 50, 75, 100], vistos = {}, tick = false;
+
+  /* Seções que o menu acompanha, na ordem da página. */
+  var secoes = [];
+  document.querySelectorAll("[data-secao]").forEach(function (a) {
+    var id = a.getAttribute("data-secao"), s = document.getElementById(id);
+    if (s && secoes.indexOf(s) < 0) secoes.push(s);
+  });
+  secoes.sort(function (a, b) {
+    return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+  });
+  var secaoAtual = null;
 
   function aoRolar() {
     var d = document.documentElement;
@@ -618,12 +652,33 @@ function iniciarPagina() {
 
     if (topo) topo.classList.toggle("compacto", y > 60);
 
-    /* Etapas acendem uma a uma quando chegam a ~70% da altura da tela. */
+    /* Etapas acendem uma a uma quando chegam a ~70% da altura da tela, e a
+       linha que liga os círculos avança junto. */
     if (etapas.length) {
       var linhaAtiva = window.innerHeight * 0.72;
       etapas = etapas.filter(function (el) {
-        if (el.getBoundingClientRect().top < linhaAtiva) { el.classList.add("ativa"); return false; }
+        if (el.getBoundingClientRect().top < linhaAtiva) {
+          el.classList.add("ativa"); acesas++; return false;
+        }
         return true;
+      });
+      if (caixaEtapas && totalEtapas > 1) {
+        caixaEtapas.style.setProperty("--prog", Math.max(0, acesas - 1) / (totalEtapas - 1));
+      }
+    }
+
+    /* Menu: marca a seção em que a pessoa está. */
+    var atual = null;
+    for (var i = 0; i < secoes.length; i++) {
+      if (secoes[i].getBoundingClientRect().top <= 140) atual = secoes[i];
+    }
+    if (atual !== secaoAtual) {
+      secaoAtual = atual;
+      var idAtual = atual ? atual.id : "";
+      document.querySelectorAll("[data-secao]").forEach(function (a) {
+        var ativo = a.getAttribute("data-secao") === idAtual;
+        a.classList.toggle("ativo", ativo);
+        if (ativo) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
       });
     }
 
@@ -647,6 +702,8 @@ function iniciarPagina() {
   window.addEventListener("resize", aoRolar, { passive: true });
   aoRolar();
 
+  iniciarMenu();
+  iniciarContadores();
   iniciarRelatos();
 
   /* --- FAQ --- */
@@ -686,7 +743,97 @@ function iniciarPagina() {
 }
 
 /* ========================================================================
-   6. Relatos — faixa contínua de mensagens
+   6. Menu lateral (mobile) e contadores
+   ======================================================================== */
+var MENU = { aberto: false, btn: null, gaveta: null };
+
+function abrirMenu() {
+  if (!MENU.gaveta || MENU.aberto) return;
+  MENU.aberto = true;
+  MENU.gaveta.classList.add("aberta");
+  MENU.gaveta.setAttribute("aria-hidden", "false");
+  MENU.btn.setAttribute("aria-expanded", "true");
+  document.body.classList.add("menu-aberto");
+  track("menu_abrir", {}, true);
+  /* foco no primeiro link depois que o painel fica visível */
+  setTimeout(function () {
+    var primeiro = MENU.gaveta.querySelector(".gaveta-links a");
+    if (primeiro) primeiro.focus({ preventScroll: true });
+  }, 60);
+}
+
+/* semFoco: ao navegar por um link, o foco não volta para o botão (a página
+   está rolando até a seção escolhida). */
+function fecharMenu(semFoco) {
+  if (!MENU.aberto) return;
+  MENU.aberto = false;
+  MENU.gaveta.classList.remove("aberta");
+  MENU.gaveta.setAttribute("aria-hidden", "true");
+  MENU.btn.setAttribute("aria-expanded", "false");
+  document.body.classList.remove("menu-aberto");
+  if (!semFoco) MENU.btn.focus({ preventScroll: true });
+}
+
+function iniciarMenu() {
+  MENU.btn = document.getElementById("menuBtn");
+  MENU.gaveta = document.getElementById("gaveta");
+  if (!MENU.btn || !MENU.gaveta) return;
+
+  MENU.btn.addEventListener("click", abrirMenu);
+  MENU.gaveta.addEventListener("click", function (e) {
+    if (e.target.closest("[data-fechar-menu]")) return fecharMenu();
+    var link = e.target.closest('a[href^="#"]');
+    if (link) {
+      fecharMenu(true);
+      track("menu_navegar", { origem: link.getAttribute("href").slice(1) }, true);
+    }
+  });
+
+  /* Tab circula dentro do painel enquanto ele está aberto. */
+  MENU.gaveta.addEventListener("keydown", function (e) {
+    if (e.key !== "Tab" || !MENU.aberto) return;
+    var focaveis = MENU.gaveta.querySelectorAll("a[href], button");
+    var primeiro = focaveis[0], ultimo = focaveis[focaveis.length - 1];
+    if (e.shiftKey && document.activeElement === primeiro) { e.preventDefault(); ultimo.focus(); }
+    else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primeiro.focus(); }
+  });
+
+  /* Se a tela crescer para desktop com o menu aberto, fecha. */
+  window.addEventListener("resize", function () {
+    if (MENU.aberto && window.innerWidth > 900) fecharMenu(true);
+  }, { passive: true });
+}
+
+/* Números da faixa escura contam do zero quando aparecem. Sem script ou com
+   movimento reduzido, o valor final já está no HTML. */
+function iniciarContadores() {
+  var nums = [].slice.call(document.querySelectorAll("[data-count]"));
+  if (!nums.length || REDUZ || !("IntersectionObserver" in window)) return;
+
+  function contar(el) {
+    var alvo = +el.getAttribute("data-count"), t0 = 0, dur = 1400;
+    function quadro(t) {
+      if (!t0) t0 = t;
+      var k = Math.min((t - t0) / dur, 1);
+      el.textContent = Math.round(alvo * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(quadro);
+    }
+    requestAnimationFrame(quadro);
+  }
+
+  nums.forEach(function (n) { n.textContent = "0"; });
+  var io = new IntersectionObserver(function (ents) {
+    ents.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      contar(e.target);
+    });
+  }, { threshold: 0.6 });
+  nums.forEach(function (n) { io.observe(n); });
+}
+
+/* ========================================================================
+   7. Relatos — faixa contínua de mensagens
    ======================================================================== */
 function iniciarRelatos() {
   var trilho = document.getElementById("relatosTrilho");

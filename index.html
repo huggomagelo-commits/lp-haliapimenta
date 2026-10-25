@@ -14,16 +14,36 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;700&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;700&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+<!-- Ícones de traço, reaproveitados pelos cartões. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-carteira" viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M8.5 7.5V6a3.5 3.5 0 0 1 7 0v1.5M3.5 12.5h17"/></symbol>
+  <symbol id="i-casa" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v8.5a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-loja" viewBox="0 0 24 24"><path d="M4 9.5 5.5 4h13L20 9.5M4 9.5h16M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0M5.5 12v8h13v-8M10 20v-4.5h4V20"/></symbol>
+  <symbol id="i-bebe" viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"/><path d="M10.2 8.6h.01M13.8 8.6h.01M10.6 11c.9.7 1.9.7 2.8 0M5 21c1-4 3.6-6 7-6s6 2 7 6"/></symbol>
+  <symbol id="i-negado" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9.5 12.5l5 5M14.5 12.5l-5 5"/></symbol>
+  <symbol id="i-rural" viewBox="0 0 24 24"><path d="M12 21v-8M12 13c0-4 3-7 8-7 0 4-3 7-8 7zM12 15.5c0-3-2.5-5.5-7-5.5 0 3 2.5 5.5 7 5.5z"/></symbol>
+  <symbol id="i-online" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.3 3.5 8.5s-1.1 6.1-3.5 8.5M12 3.5C9.6 5.9 8.5 8.8 8.5 12s1.1 6.1 3.5 8.5"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
+  <symbol id="i-escudo" viewBox="0 0 24 24"><path d="M12 3.5 5 6.5v5c0 4.4 3 8 7 9.5 4-1.5 7-5.1 7-9.5v-5z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+  <symbol id="i-acordo" viewBox="0 0 24 24"><path d="M4 12.5 8 9l3.5 1.5L14 9l6 3.5M8 9 4 6.5M16 9l4-2.5M7 14.5l2.5 2.5M10 13l3 3.5M13 12.5l2.5 3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+</svg>
+
 <!-- ===================== CABEÇALHO ===================== -->
 <header class="topo">
   <div class="wrap">
+    <!-- Mobile: três linhas no canto esquerdo abrem a barra lateral. -->
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="Abrir menu de navegação"
+            aria-controls="gaveta" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <a class="marca" href="#topo" aria-label="Halia Pimenta, Advocacia Previdenciária">
       <span class="marca-selo" aria-hidden="true">
         <i>H</i>
@@ -33,22 +53,57 @@
     </a>
     <!-- Âncoras também servem como sitelinks nos anúncios. -->
     <nav class="menu" aria-label="Navegação principal">
-      <a href="#quem-tem-direito">Quem tem direito</a>
-      <a href="#relatos">Relatos</a>
-      <a href="#o-beneficio">O benefício</a>
-      <a href="#atendimento">Atendimento</a>
-      <a href="#advogada">A advogada</a>
-      <a href="#duvidas">Dúvidas</a>
+      <a href="#quem-tem-direito" data-secao="quem-tem-direito">Quem tem direito</a>
+      <a href="#o-beneficio" data-secao="o-beneficio">O benefício</a>
+      <a href="#relatos" data-secao="relatos">Relatos</a>
+      <a href="#atendimento" data-secao="atendimento">Como funciona</a>
+      <a href="#advogada" data-secao="advogada">A advogada</a>
+      <a href="#duvidas" data-secao="duvidas">Dúvidas</a>
     </nav>
     <button type="button" class="btn" data-quiz="header">Verificar minha situação</button>
   </div>
 </header>
 
+<!-- ===================== BARRA LATERAL (MOBILE) ===================== -->
+<div class="gaveta" id="gaveta" aria-hidden="true">
+  <div class="gaveta-fundo" data-fechar-menu></div>
+  <nav class="gaveta-painel" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+    <div class="gaveta-topo">
+      <span class="marca">
+        <span class="marca-selo" aria-hidden="true">
+          <i>H</i>
+          <img src="img/logo.png" width="256" height="256" alt="" onerror="this.remove()">
+        </span>
+        <span class="marca-txt"><b>Halia Pimenta</b><small>Advocacia Previdenciária</small></span>
+      </span>
+      <button type="button" class="gaveta-fechar" data-fechar-menu aria-label="Fechar menu">&times;</button>
+    </div>
+
+    <ol class="gaveta-links">
+      <li><a href="#topo" data-secao="topo"><span>01</span>Início</a></li>
+      <li><a href="#quem-tem-direito" data-secao="quem-tem-direito"><span>02</span>Quem tem direito</a></li>
+      <li><a href="#o-beneficio" data-secao="o-beneficio"><span>03</span>O benefício</a></li>
+      <li><a href="#relatos" data-secao="relatos"><span>04</span>Relatos de clientes</a></li>
+      <li><a href="#atendimento" data-secao="atendimento"><span>05</span>Como funciona</a></li>
+      <li><a href="#verificar" data-secao="verificar"><span>06</span>Verificação</a></li>
+      <li><a href="#advogada" data-secao="advogada"><span>07</span>A advogada</a></li>
+      <li><a href="#duvidas" data-secao="duvidas"><span>08</span>Dúvidas</a></li>
+    </ol>
+
+    <div class="gaveta-acoes">
+      <button type="button" class="btn" data-quiz="menu">Verificar minha situação</button>
+      <a class="hedge" data-hedge="menu" href="https://wa.me/5598991338517" target="_blank" rel="noopener">Falar no WhatsApp</a>
+    </div>
+
+    <p class="gaveta-rodape">Dra. Halia Pimenta · OAB/MA 19.117<br>Atendimento 100% online, para todo o Brasil</p>
+  </nav>
+</div>
+
 <main>
 
 <!-- ===================== 1. PROMESSA ===================== -->
 <section class="hero" id="topo">
-  <div class="wrap">
+  <div class="wrap hero-grid">
     <div class="hero-texto">
       <p class="chamada">Grávida ou teve bebê nos últimos 5 anos?</p>
 
@@ -63,79 +118,163 @@
       </div>
 
       <p class="hero-nota">Leva menos de um minuto. Não pedimos nome, telefone nem documento.</p>
+
+      <div class="destaques">
+        <p class="destaque"><svg aria-hidden="true"><use href="#i-bebe"/></svg>
+        <span>O pedido pode ser feito em até <b>5 anos</b> depois do nascimento.</span></p>
+        <p class="destaque"><svg aria-hidden="true"><use href="#i-escudo"/></svg>
+        <span>Atendimento <b>sigiloso</b> e <b>100% online</b>, para todo o Brasil.</span></p>
+      </div>
+    </div>
+
+    <!-- Prova do hero. Quando a carta real chegar, basta descomentar a <img> com o arquivo
+         img/caso-1.webp (dados pessoais tarjados): o selo "Caso real" e a legenda de caso
+         aparecem sozinhos. Sem imagem, o cartão mostra um documento ilustrativo e não
+         afirma caso nenhum. -->
+    <div class="hero-prova">
+      <figure class="provinha">
+        <span class="provinha-selo" aria-hidden="true">Caso<br>real</span>
+        <div class="provinha-doc">
+          <div class="doc-ilustra" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <span class="doc-check"><svg><use href="#i-check"/></svg></span>
+          </div>
+          <!-- <img src="img/caso-1.webp" width="600" height="750" alt="Carta de concessão de salário-maternidade emitida pelo INSS, com dados pessoais ocultos"> -->
+        </div>
+        <figcaption>
+          <span class="leg-caso"><b>Carta de concessão emitida</b>
+          Documento oficial do INSS confirmando o benefício, obtido após análise jurídica do caso.</span>
+          <span class="leg-ilustra"><b>A resposta que você procura</b>
+          O pedido termina com a carta do INSS. Nosso trabalho é fazer ele chegar correto até lá.</span>
+        </figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
-<div class="faixa-lei">
-  <div class="wrap reveal">
-    <span>Base legal</span>
-    <p>Salário-maternidade: <strong>Lei nº 8.213/1991, arts. 71 a 73</strong>. Duração de 120 dias,
-    pagos pelo INSS ou pela empresa conforme o vínculo.</p>
+<!-- ===================== NÚMEROS ===================== -->
+<section class="numeros" aria-label="O benefício em números">
+  <div class="wrap">
+    <div class="numeros-grid">
+      <div class="stat"><b><span data-count="120">120</span></b><small>dias de benefício</small></div>
+      <div class="stat"><b><span data-count="5">5</span> <i>anos</i></b><small>de prazo para pedir</small></div>
+      <div class="stat"><b><span data-count="100">100</span><i>%</i></b><small>online, todo o Brasil</small></div>
+      <div class="stat"><b><i>&lt;</i> <span data-count="1">1</span> <i>min</i></b><small>para verificar o seu caso</small></div>
+    </div>
+    <p class="numeros-lei">Lei nº 8.213/1991, arts. 71 a 73 e art. 103</p>
   </div>
-</div>
+</section>
 
 <!-- ===================== 2. IDENTIFICAÇÃO ===================== -->
-<section id="quem-tem-direito" class="sec-papel2">
-  <div class="wrap reveal">
-    <div class="regua"></div>
-    <span class="eyebrow">Para quem é</span>
-    <h2 class="tit">Você provavelmente se reconhece em uma destas situações</h2>
+<section id="quem-tem-direito">
+  <div class="wrap">
+    <div class="cab reveal">
+      <span class="eyebrow">Para quem é</span>
+      <h2 class="tit">Você provavelmente se reconhece em <em>uma destas situações</em></h2>
+    </div>
 
-    <div class="casos">
-      <article class="caso">
+    <div class="cards-casos">
+      <article class="card-caso">
+        <span class="card-ico"><svg aria-hidden="true"><use href="#i-carteira"/></svg></span>
+        <span class="card-n">01</span>
         <h3>Está grávida e trabalha de carteira assinada</h3>
         <p>A empresa paga durante a licença. Se houver uma segunda filiação ativa, pode haver um
         segundo pedido.</p>
       </article>
-      <article class="caso">
+      <article class="card-caso">
+        <span class="card-ico"><svg aria-hidden="true"><use href="#i-casa"/></svg></span>
+        <span class="card-n">02</span>
         <h3>Está grávida e desempregada</h3>
         <p>Quem saiu de um emprego com carteira permanece protegida pelo período de graça. Se o
         parto ocorrer dentro do prazo, o direito costuma existir.</p>
       </article>
-      <article class="caso">
+      <article class="card-caso">
+        <span class="card-ico"><svg aria-hidden="true"><use href="#i-loja"/></svg></span>
+        <span class="card-n">03</span>
         <h3>É MEI, autônoma ou contribui por conta</h3>
         <p>A filiação como contribuinte individual gera direito próprio, com regras específicas de
         contribuição.</p>
       </article>
-      <article class="caso">
+      <article class="card-caso">
+        <span class="card-ico"><svg aria-hidden="true"><use href="#i-bebe"/></svg></span>
+        <span class="card-n">04</span>
         <h3>Teve o bebê nos últimos 5 anos e nunca pediu</h3>
         <p>O pedido ainda pode ser apresentado dentro do prazo legal, mesmo tempos depois do
         nascimento.</p>
       </article>
-      <article class="caso">
+      <article class="card-caso">
+        <span class="card-ico"><svg aria-hidden="true"><use href="#i-negado"/></svg></span>
+        <span class="card-n">05</span>
         <h3>Pediu e o INSS negou</h3>
         <p>A negativa costuma vir de documento faltante ou guia em código incorreto, e não da
         ausência de direito.</p>
       </article>
-      <article class="caso">
+      <article class="card-caso">
+        <span class="card-ico"><svg aria-hidden="true"><use href="#i-rural"/></svg></span>
+        <span class="card-n">06</span>
         <h3>Trabalha na roça, na pesca ou em atividade rural</h3>
         <p>A segurada especial também tem direito, com forma própria de comprovação da atividade.</p>
       </article>
     </div>
 
-    <div class="acao-secao">
+    <div class="acao-secao reveal">
       <button type="button" class="btn" data-quiz="identificacao">Verificar minha situação</button>
       <span>Leva menos de um minuto</span>
     </div>
   </div>
 </section>
 
-<div class="faixa-lei">
-  <div class="wrap reveal">
-    <span>Base legal</span>
-    <p>Período de graça: <strong>Lei nº 8.213/1991, art. 15</strong>. Mantém a qualidade de
-    segurada por até 12 meses após o fim das contribuições, prazo que pode ser maior em algumas
-    situações.</p>
-  </div>
-</div>
+<!-- ===================== 3. COMO RECEBER ===================== -->
+<section id="o-beneficio" class="sec-papel2">
+  <div class="wrap">
+    <div class="cab reveal">
+      <span class="eyebrow">Como se recebe</span>
+      <h2 class="tit">Cada filiação ao INSS gera <em>um pedido próprio</em></h2>
+      <p class="sub">É a origem do vínculo que define quem paga. Quando existem duas filiações reais
+      e simultâneas, existem dois pedidos possíveis.</p>
+    </div>
 
-<!-- ===================== 3. RELATOS ===================== -->
+    <div class="comparativo">
+      <div class="via">
+        <span class="via-ordem">01</span>
+        <h3>Vínculo celetista</h3>
+        <p class="via-fonte">Pago pela empresa</p>
+        <p>Com carteira assinada, a empresa paga o salário-maternidade durante a licença. É o
+        benefício que quase toda gestante já conhece.</p>
+        <span class="via-estado garantido">Previsto em lei para a empregada</span>
+      </div>
+
+      <span class="via-mais reveal" aria-hidden="true">+</span>
+
+      <div class="via">
+        <span class="via-ordem">02</span>
+        <h3>Contribuinte individual</h3>
+        <p class="via-fonte">Pago pela Previdência</p>
+        <p>Se, além do emprego, houver contribuição válida como MEI ou autônoma, a lei admite o
+        pedido também por essa filiação.</p>
+        <span class="via-estado condicional">Depende da análise do seu histórico</span>
+      </div>
+    </div>
+
+    <p class="ressalva reveal"><strong>Importante.</strong> O segundo benefício existe em situações
+    específicas, com dois vínculos reais e simultâneos. Não é a realidade da maioria. Ainda assim,
+    o salário-maternidade alcança muitas outras situações, e a verificação indica em qual delas
+    você está.</p>
+
+    <div class="acao-secao reveal">
+      <button type="button" class="btn" data-quiz="beneficio">Verificar minha situação</button>
+      <span>Sem informar nenhum dado pessoal</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4. RELATOS ===================== -->
 <section id="relatos" class="relatos">
-  <div class="wrap reveal">
-    <div class="regua"></div>
-    <span class="eyebrow">Relatos de clientes</span>
-    <h2 class="tit">Mães que já passaram por isso</h2>
+  <div class="wrap">
+    <div class="cab reveal">
+      <span class="eyebrow">Relatos de clientes</span>
+      <h2 class="tit">Mães que <em>já passaram por isso</em></h2>
+    </div>
   </div>
 
   <!-- Mensagens transcritas dos prints, em formato de conversa. O script clona a
@@ -190,126 +329,114 @@
   </div>
 </section>
 
-<!-- ===================== 4. COMO RECEBER ===================== -->
-<section id="o-beneficio" class="sec-papel2">
-  <div class="wrap reveal">
-    <div class="regua"></div>
-    <span class="eyebrow">Como se recebe</span>
-    <h2 class="tit">Cada filiação ao INSS gera um pedido próprio</h2>
-    <p class="sub">É a origem do vínculo que define quem paga. Quando existem duas filiações reais
-    e simultâneas, existem dois pedidos possíveis.</p>
-
-    <div class="comparativo">
-      <div class="via">
-        <span class="via-ordem">01</span>
-        <h3>Vínculo celetista</h3>
-        <p class="via-fonte">Pago pela empresa</p>
-        <p>Com carteira assinada, a empresa paga o salário-maternidade durante a licença. É o
-        benefício que quase toda gestante já conhece.</p>
-        <span class="via-estado garantido">Direito assegurado pela CLT</span>
-      </div>
-
-      <div class="via">
-        <span class="via-ordem">02</span>
-        <h3>Contribuinte individual</h3>
-        <p class="via-fonte">Pago pela Previdência</p>
-        <p>Se, além do emprego, houver contribuição válida como MEI ou autônoma, a lei admite o
-        pedido também por essa filiação.</p>
-        <span class="via-estado condicional">Depende da análise do seu histórico</span>
-      </div>
+<!-- ===================== 5. DÚVIDA PRINCIPAL + BASE LEGAL ===================== -->
+<section class="duvida sec-escura">
+  <div class="wrap duvida-grid">
+    <div class="reveal">
+      <span class="eyebrow">A dúvida que mais ouvimos</span>
+      <h2 class="tit">Isso é legal? <em>Posso ter algum problema?</em></h2>
+      <p class="txt">Sim, é legal. O salário-maternidade está previsto em lei e o pedido é
+      apresentado pelos canais oficiais do INSS. Constituir advogado é um direito seu e não gera
+      qualquer pendência com a Previdência.</p>
+      <p class="txt">O que fazemos é ler o seu histórico de contribuições antes de pedir, para que o
+      requerimento chegue correto na primeira tentativa.</p>
     </div>
 
-    <p class="ressalva"><strong>Importante.</strong> O segundo benefício existe em situações
-    específicas, com dois vínculos reais e simultâneos. Não é a realidade da maioria. Ainda assim,
-    o salário-maternidade alcança muitas outras situações, e a verificação indica em qual delas
-    você está.</p>
-
-    <div class="acao-secao">
-      <button type="button" class="btn" data-quiz="beneficio">Verificar minha situação</button>
-      <span>Sem informar nenhum dado pessoal</span>
-    </div>
+    <aside class="base-legal reveal" aria-label="Base legal">
+      <span class="eyebrow">Base legal</span>
+      <dl>
+        <div><dt>Lei nº 8.213/1991, arts. 71 a 73</dt>
+        <dd>Salário-maternidade de 120 dias, pago pelo INSS ou pela empresa conforme o vínculo.</dd></div>
+        <div><dt>Lei nº 8.213/1991, art. 15</dt>
+        <dd>Período de graça: mantém a qualidade de segurada por até 12 meses após o fim das
+        contribuições, prazo que pode ser maior em algumas situações.</dd></div>
+        <div><dt>Lei nº 8.213/1991, art. 103</dt>
+        <dd>O direito ao benefício prescreve em cinco anos contados do nascimento.</dd></div>
+      </dl>
+    </aside>
   </div>
 </section>
 
-<!-- ===================== DÚVIDA PRINCIPAL ===================== -->
-<section class="duvida-central">
-  <div class="wrap reveal">
-    <span class="eyebrow">A dúvida que mais ouvimos</span>
-    <h2>Isso é legal? Posso ter algum problema?</h2>
-    <p>Sim, é legal. O salário-maternidade está previsto em lei e o pedido é apresentado pelos
-    canais oficiais do INSS. Constituir advogado é um direito seu e não gera qualquer pendência
-    com a Previdência.</p>
-    <p>O que fazemos é ler o seu histórico de contribuições antes de pedir, para que o
-    requerimento chegue correto na primeira tentativa.</p>
-  </div>
-</section>
-
-<div class="faixa-lei">
-  <div class="wrap reveal">
-    <span>Base legal</span>
-    <p>Prazo para pedir: <strong>Lei nº 8.213/1991, art. 103</strong>. O direito ao benefício
-    prescreve em cinco anos contados do nascimento.</p>
-  </div>
-</div>
-
-<!-- ===================== 5. ATENDIMENTO ===================== -->
-<section id="atendimento">
-  <div class="wrap reveal">
-    <div class="regua"></div>
-    <span class="eyebrow">Como trabalhamos</span>
-    <h2 class="tit">Do primeiro clique ao pedido protocolado</h2>
-
-    <div class="trabalho">
-      <ul class="compromissos-claro">
-        <li>Atendimento integralmente online, para todo o Brasil</li>
-        <li>Documentação e protocolo por nossa conta</li>
-        <li>Pedidos apresentados pelos canais oficiais do INSS</li>
-        <li>Honorários esclarecidos antes de qualquer decisão</li>
-      </ul>
-
-      <div class="etapas">
-        <article class="etapa">
-          <span class="etapa-n">01</span>
-          <div>
-            <h3>Você verifica a sua situação</h3>
-            <p>Aqui mesmo, em menos de um minuto, sem informar nome, telefone ou documento.</p>
-          </div>
-        </article>
-        <article class="etapa">
-          <span class="etapa-n">02</span>
-          <div>
-            <h3>A equipe recebe você no WhatsApp</h3>
-            <p>Suas respostas chegam junto com a mensagem. Você não precisa contar a sua história
-            desde o começo.</p>
-          </div>
-        </article>
-        <article class="etapa">
-          <span class="etapa-n">03</span>
-          <div>
-            <h3>Leitura do seu histórico no CNIS</h3>
-            <p>Conferimos vínculos, contribuições e qualidade de segurada antes de apresentar
-            qualquer pedido.</p>
-          </div>
-        </article>
-        <article class="etapa">
-          <span class="etapa-n">04</span>
-          <div>
-            <h3>Pedido e acompanhamento</h3>
-            <p>Reunimos a documentação, protocolamos pelos canais oficiais e acompanhamos cada
-            movimentação até a decisão.</p>
-          </div>
-        </article>
-      </div>
+<!-- ===================== 6. ATENDIMENTO ===================== -->
+<section id="atendimento" class="sec-papel2">
+  <div class="wrap">
+    <div class="cab reveal">
+      <span class="eyebrow">Como funciona</span>
+      <h2 class="tit">Do primeiro clique <em>ao pedido protocolado</em></h2>
     </div>
 
-    <div class="acao-secao">
+    <ul class="compromissos">
+      <li><span class="card-ico"><svg aria-hidden="true"><use href="#i-online"/></svg></span>
+        Atendimento 100% online, para todo o Brasil</li>
+      <li><span class="card-ico"><svg aria-hidden="true"><use href="#i-doc"/></svg></span>
+        Documentação e protocolo por nossa conta</li>
+      <li><span class="card-ico"><svg aria-hidden="true"><use href="#i-escudo"/></svg></span>
+        Pedidos pelos canais oficiais do INSS</li>
+      <li><span class="card-ico"><svg aria-hidden="true"><use href="#i-acordo"/></svg></span>
+        Honorários esclarecidos antes de qualquer decisão</li>
+    </ul>
+
+    <div class="etapas" id="etapas">
+      <article class="etapa">
+        <span class="etapa-n">01</span>
+        <h3>Você verifica a sua situação</h3>
+        <p>Aqui mesmo, em menos de um minuto, sem informar nome, telefone ou documento.</p>
+      </article>
+      <article class="etapa">
+        <span class="etapa-n">02</span>
+        <h3>A equipe recebe você no WhatsApp</h3>
+        <p>Suas respostas chegam junto com a mensagem. Você não precisa contar a sua história
+        desde o começo.</p>
+      </article>
+      <article class="etapa">
+        <span class="etapa-n">03</span>
+        <h3>Leitura do seu histórico no CNIS</h3>
+        <p>Conferimos vínculos, contribuições e qualidade de segurada antes de apresentar
+        qualquer pedido.</p>
+      </article>
+      <article class="etapa">
+        <span class="etapa-n">04</span>
+        <h3>Pedido e acompanhamento</h3>
+        <p>Reunimos a documentação, protocolamos pelos canais oficiais e acompanhamos cada
+        movimentação até a decisão.</p>
+      </article>
+    </div>
+
+    <div class="acao-secao reveal">
       <button type="button" class="btn" data-quiz="atendimento">Verificar minha situação</button>
       <span>Conversa inicial sem compromisso</span>
     </div>
   </div>
 </section>
 
-<!-- ===================== 6. QUEM RESOLVE ===================== -->
+<!-- ===================== 7. VERIFICAÇÃO NA PÁGINA ===================== -->
+<!-- A primeira pergunta do quiz já aparece aqui. Ao escolher, o modal abre
+     direto na pergunta seguinte, com a resposta registrada. -->
+<section id="verificar" class="verificar">
+  <div class="wrap">
+    <div class="cab cab-centro reveal">
+      <span class="eyebrow">Verificação gratuita</span>
+      <h2 class="tit">Comece agora, <em>em até 4 respostas</em></h2>
+      <p class="sub">Sem nome, telefone ou documento. Ao final, suas respostas seguem prontas para a
+      equipe no WhatsApp.</p>
+    </div>
+
+    <div class="vq reveal">
+      <div class="vq-barra"><i></i></div>
+      <p class="vq-passo">Pergunta 1</p>
+      <h3 class="vq-pergunta">Quando seu bebê nasceu ou vai nascer?</h3>
+      <div class="vq-opcoes">
+        <button type="button" class="vq-op" data-v="gravida"><span class="b"></span>Estou grávida</button>
+        <button type="button" class="vq-op" data-v="menos1"><span class="b"></span>Nasceu há menos de 1 ano</button>
+        <button type="button" class="vq-op" data-v="1a5"><span class="b"></span>Nasceu entre 1 e 5 anos</button>
+        <button type="button" class="vq-op" data-v="mais5"><span class="b"></span>Nasceu há mais de 5 anos</button>
+        <button type="button" class="vq-op" data-v="naoainda"><span class="b"></span>Ainda não estou grávida</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 8. QUEM RESOLVE ===================== -->
 <section id="advogada" class="sobre sec-papel2">
   <div class="wrap">
     <div class="sobre-grid reveal">
@@ -323,9 +450,8 @@
       </figure>
 
       <div class="sobre-txt">
-        <div class="regua"></div>
         <span class="eyebrow">Sobre a advogada</span>
-        <h2 class="tit">Prazer, sou a Halia Pimenta</h2>
+        <h2 class="tit">Prazer, sou a <em>Halia Pimenta</em></h2>
 
         <p class="sobre-linha">Dra. Halia Georgete Lima Pimenta · OAB/MA 19.117 · Direito
         Previdenciário</p>
@@ -353,44 +479,45 @@
   </div>
 </section>
 
-<!-- ===================== 7. DÚVIDAS ===================== -->
+<!-- ===================== 9. DÚVIDAS ===================== -->
 <section id="duvidas" class="faq">
-  <div class="wrap reveal">
-    <div class="regua"></div>
-    <span class="eyebrow">Perguntas frequentes</span>
-    <h2 class="tit">O que ainda pode estar na sua cabeça</h2>
+  <div class="wrap">
+    <div class="cab reveal">
+      <span class="eyebrow">Perguntas frequentes</span>
+      <h2 class="tit">O que ainda pode estar <em>na sua cabeça</em></h2>
+    </div>
 
-    <div class="faq-lista">
+    <div class="faq-lista reveal">
       <details>
-        <summary>Contribuí poucas vezes. Isso é suficiente?</summary>
+        <summary>Contribuí poucas vezes. Isso é suficiente?<span class="faq-ico" aria-hidden="true"></span></summary>
         <p class="resp">Depende da sua categoria de segurada. As regras de carência variam entre
         empregada, contribuinte individual, facultativa e segurada especial. A análise do CNIS é o
         que responde com segurança no seu caso.</p>
       </details>
       <details>
-        <summary>Quanto eu posso receber?</summary>
+        <summary>Quanto eu posso receber?<span class="faq-ico" aria-hidden="true"></span></summary>
         <p class="resp">Depende do seu histórico de contribuições. Não estimamos valores sem antes
         analisar o CNIS, porque qualquer número dito fora dessa análise seria especulação.</p>
       </details>
       <details>
-        <summary>Preciso já ter o bebê para pedir?</summary>
+        <summary>Preciso já ter o bebê para pedir?<span class="faq-ico" aria-hidden="true"></span></summary>
         <p class="resp">O momento certo depende do seu caso: gestação, parto ou adoção. Na
         verificação e na conversa seguinte explicamos qual é a etapa adequada para você.</p>
       </details>
       <details>
-        <summary>Quanto custa?</summary>
+        <summary>Quanto custa?<span class="faq-ico" aria-hidden="true"></span></summary>
         <p class="resp">A conversa inicial é sem compromisso. Os honorários são esclarecidos de
         forma clara antes de qualquer decisão, observados os parâmetros da tabela da OAB.</p>
       </details>
       <details>
-        <summary>Meus dados ficam guardados?</summary>
+        <summary>Meus dados ficam guardados?<span class="faq-ico" aria-hidden="true"></span></summary>
         <p class="resp">A verificação não solicita nome, telefone ou documento, e nenhuma resposta
         é armazenada. Elas apenas compõem o texto da mensagem no seu próprio WhatsApp. Veja a
         <a href="politica-privacidade.html">Política de Privacidade</a>.</p>
       </details>
     </div>
 
-    <div class="acao-secao">
+    <div class="acao-secao reveal">
       <button type="button" class="btn btn-grande" data-quiz="faq">Verificar minha situação</button>
       <span>Gratuito e sem compromisso</span>
     </div>
@@ -420,9 +547,9 @@
         <h5>Navegação</h5>
         <ul class="rod-lista">
           <li><a href="#quem-tem-direito">Quem tem direito</a></li>
-          <li><a href="#relatos">Relatos</a></li>
           <li><a href="#o-beneficio">O benefício</a></li>
-          <li><a href="#atendimento">Atendimento</a></li>
+          <li><a href="#relatos">Relatos</a></li>
+          <li><a href="#atendimento">Como funciona</a></li>
           <li><a href="#advogada">A advogada</a></li>
           <li><a href="#duvidas">Dúvidas</a></li>
         </ul>
