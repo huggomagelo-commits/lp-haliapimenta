@@ -28,6 +28,9 @@ var CFG = {
 
 var REDUZ = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* Estados iniciais de animação no CSS ficam sob .js: sem script, nada some. */
+document.documentElement.classList.add("js");
+
 /* Avisa no console enquanto os dados de contato ainda forem placeholder —
    rede de segurança para não subir a página com os CTAs quebrados. */
 (function () {
@@ -583,7 +586,7 @@ function iniciarPagina() {
 
   /* --- reveal com stagger --- */
   document.querySelectorAll(".reveal").forEach(function (bloco) {
-    bloco.querySelectorAll(".via, .caso, .relato, .etapa, .compromissos-claro li")
+    bloco.querySelectorAll(".via, .caso, .etapa, .compromissos-claro li, .selos li")
       .forEach(function (fi, i) {
         fi.classList.add("reveal");
         fi.style.setProperty("--d", Math.min(i * 60, 260) + "ms");
@@ -605,6 +608,7 @@ function iniciarPagina() {
   var topo = document.querySelector(".topo");
   var fixa = document.getElementById("barraFixa");
   var hero = document.querySelector(".hero");
+  var etapas = [].slice.call(document.querySelectorAll(".etapa"));
   var marcos = [25, 50, 75, 100], vistos = {}, tick = false;
 
   function aoRolar() {
@@ -613,6 +617,15 @@ function iniciarPagina() {
     var y = window.scrollY;
 
     if (topo) topo.classList.toggle("compacto", y > 60);
+
+    /* Etapas acendem uma a uma quando chegam a ~70% da altura da tela. */
+    if (etapas.length) {
+      var linhaAtiva = window.innerHeight * 0.72;
+      etapas = etapas.filter(function (el) {
+        if (el.getBoundingClientRect().top < linhaAtiva) { el.classList.add("ativa"); return false; }
+        return true;
+      });
+    }
 
     /* A barra fixa entra depois que o CTA do hero sai da tela. */
     if (fixa && hero) {
@@ -633,6 +646,8 @@ function iniciarPagina() {
   }, { passive: true });
   window.addEventListener("resize", aoRolar, { passive: true });
   aoRolar();
+
+  iniciarRelatos();
 
   /* --- FAQ --- */
   document.querySelectorAll(".faq details").forEach(function (d) {
@@ -668,4 +683,149 @@ function iniciarPagina() {
   var bA = document.getElementById("ckAceitar"), bR = document.getElementById("ckRecusar");
   if (bA) bA.addEventListener("click", function () { decidir("aceito"); });
   if (bR) bR.addEventListener("click", function () { decidir("recusado"); });
+}
+
+/* ========================================================================
+   6. Relatos — faixa contínua de mensagens
+   ======================================================================== */
+function iniciarRelatos() {
+  var trilho = document.getElementById("relatosTrilho");
+  var faixa  = document.getElementById("relatosFaixa");
+  if (!trilho || !faixa) return;
+
+  /* Clona o conjunto para o loop: quando a faixa anda uma "metade", volta ao
+     início sem salto visível. Clones ficam fora da leitura de tela. */
+  var msgs = [].slice.call(faixa.children);
+  msgs.forEach(function (m, i) { m.style.setProperty("--i", i); });
+  msgs.forEach(function (m) {
+    var c = m.cloneNode(true);
+    c.setAttribute("aria-hidden", "true");
+    faixa.appendChild(c);
+  });
+
+  var VEL = 28;            // px por segundo na rolagem automática
+  var meia = 0, x = 0, ultimo = 0;
+  var visivel = false, visto = false, autoOk = false;
+  var pausaHover = false, pausaAte = 0, arrasto = null, tween = null;
+
+  if (!REDUZ) trilho.classList.add("anima");
+
+  function medir() {
+    var primeira = !meia;
+    meia = faixa.scrollWidth / 2;
+    if (primeira) {
+      /* Começa com a primeira mensagem alinhada à margem do conteúdo. O que
+         fica à esquerda é o fim do conjunto anterior — o loop é contínuo. */
+      var ref = document.querySelector("#relatos .wrap");
+      var margem = ref ? ref.getBoundingClientRect().left +
+                         parseFloat(getComputedStyle(ref).paddingLeft) : 0;
+      x = margem - meia;
+    }
+    aplicar();
+  }
+
+  function normaliza(v) {
+    while (v <= -meia) v += meia;
+    while (v > 0) v -= meia;
+    return v;
+  }
+
+  function aplicar() {
+    if (!meia) return;
+    var n = normaliza(x);
+    if (tween) { tween.de += n - x; tween.para += n - x; }
+    x = n;
+    faixa.style.transform = "translate3d(" + x.toFixed(2) + "px,0,0)";
+  }
+
+  function quadro(t) {
+    var dt = ultimo ? Math.min((t - ultimo) / 1000, 0.05) : 0;
+    ultimo = t;
+    if (visivel && meia) {
+      if (tween) {
+        var k = Math.min((t - tween.t0) / 480, 1);
+        x = tween.de + (tween.para - tween.de) * (1 - Math.pow(1 - k, 3));
+        if (k === 1) tween = null;
+      } else if (autoOk && !arrasto && !pausaHover && t > pausaAte) {
+        x -= VEL * dt;
+      }
+      aplicar();
+    }
+    requestAnimationFrame(quadro);
+  }
+
+  /* Passo de uma mensagem para setas e teclado. */
+  function deslizar(dir) {
+    if (!meia) return;
+    var passo = meia / msgs.length;
+    var de = tween ? tween.para : x;
+    tween = { de: x, para: de - dir * passo, t0: performance.now() };
+    pausaAte = performance.now() + 4000;
+  }
+
+  /* Só começa quando aparece na tela: primeiro as mensagens "chegam", depois
+     a faixa passa a rolar sozinha. Fora da tela, para. */
+  function comecar() {
+    if (visto) return;
+    visto = true;
+    trilho.classList.add("visto");
+    setTimeout(function () { autoOk = !REDUZ; }, REDUZ ? 0 : msgs.length * 420 + 1400);
+  }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (ents) {
+      visivel = ents[0].isIntersecting;
+      if (visivel) comecar();
+    }, { threshold: 0.3 }).observe(trilho);
+  } else {
+    visivel = true; comecar();
+  }
+
+  /* Mouse em cima pausa. Só mouse: no toque, o "hover" ficaria preso. */
+  trilho.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") pausaHover = true; });
+  trilho.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") pausaHover = false; });
+  trilho.addEventListener("focusin",  function () { pausaHover = true; });
+  trilho.addEventListener("focusout", function () { pausaHover = false; });
+
+  /* Arrastar com dedo ou mouse. touch-action: pan-y no CSS deixa a rolagem
+     vertical da página com o navegador e entrega o gesto lateral para cá. */
+  trilho.addEventListener("pointerdown", function (e) {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    arrasto = { x0: e.clientX, base: x, moveu: false };
+    tween = null;
+    trilho.classList.add("arrastando");
+    try { trilho.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  trilho.addEventListener("pointermove", function (e) {
+    if (!arrasto) return;
+    var dx = e.clientX - arrasto.x0;
+    if (!arrasto.moveu && Math.abs(dx) > 4) {
+      arrasto.moveu = true;
+      track("relatos_interacao", { origem: "arrastar" }, true);
+    }
+    x = arrasto.base + dx;
+  });
+  function soltar() {
+    if (!arrasto) return;
+    arrasto = null;
+    trilho.classList.remove("arrastando");
+    pausaAte = performance.now() + 2500;
+  }
+  trilho.addEventListener("pointerup", soltar);
+  trilho.addEventListener("pointercancel", soltar);
+
+  document.querySelectorAll("[data-relatos]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      deslizar(+b.getAttribute("data-relatos"));
+      track("relatos_interacao", { origem: "seta" }, true);
+    });
+  });
+  trilho.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { e.preventDefault(); deslizar(1); }
+    if (e.key === "ArrowLeft")  { e.preventDefault(); deslizar(-1); }
+  });
+
+  window.addEventListener("resize", function () { meia = faixa.scrollWidth / 2; aplicar(); },
+                          { passive: true });
+  medir();
+  requestAnimationFrame(quadro);
 }

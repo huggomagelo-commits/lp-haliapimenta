@@ -245,38 +245,79 @@ section{padding:clamp(72px,9vw,124px) 0}
 .acao-secao span{font-size:13px;color:var(--tinta-3)}
 .sec-escura .acao-secao span{color:#9A958B}
 
-/* ---------- relatos — faixa deslizante ---------- */
-.relatos-faixa{
-  margin-top:clamp(34px,4vw,52px);display:flex;gap:0;
-  overflow-x:auto;scroll-snap-type:x mandatory;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch;
-  border-top:1px solid var(--linha);
+/* ---------- relatos — conversa em movimento ----------
+   As mensagens aparecem como balões recebidos no WhatsApp: brancos sobre o
+   papel, que já lembra o fundo bege do app. Ao entrar na tela, cada balão mostra
+   "digitando" e depois o texto; em seguida a faixa rola sozinha, em loop. Pausa
+   com o mouse em cima, arrasta com dedo ou mouse, e tem setas e teclado. */
+.relatos-trilho{
+  position:relative;margin-top:clamp(30px,4vw,48px);padding:18px 0 34px;
+  overflow:hidden;cursor:grab;touch-action:pan-y;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
 }
-.relatos-faixa::-webkit-scrollbar{display:none}
-.relato{
-  scroll-snap-align:start;flex:0 0 330px;padding:30px 36px 30px 0;
-  border-right:1px solid var(--linha);
+.relatos-trilho.arrastando{cursor:grabbing;-webkit-user-select:none;user-select:none}
+.relatos-trilho:focus-visible{outline:2px solid var(--ouro);outline-offset:-2px}
+.chat-faixa{display:flex;align-items:flex-start;width:max-content;will-change:transform}
+
+.msg{
+  flex:0 0 auto;width:340px;margin:0 22px 0 0;position:relative;
+  background:var(--papel-3);border-radius:2px 14px 14px 14px;
+  padding:12px 18px 10px;
+  box-shadow:0 1px 1px rgba(22,22,26,.06),0 14px 30px -18px rgba(22,22,26,.28);
 }
-.relato:last-child{border-right:none}
-.relato p{
-  font-family:var(--disp);font-size:21px;line-height:1.45;color:var(--tinta);
-  font-weight:500;max-width:none;
+/* rabicho do balão, como no app */
+.msg::before{
+  content:"";position:absolute;left:-8px;top:0;
+  border-top:11px solid var(--papel-3);border-left:9px solid transparent;
 }
-.relato p strong{font-weight:600}
-.relato cite{
-  display:flex;align-items:center;gap:10px;font-style:normal;margin-top:18px;
-  font-size:12px;letter-spacing:.11em;text-transform:uppercase;
-  color:var(--tinta-3);font-weight:700;
+/* alturas desencontradas: lê como conversa, não como grade */
+.msg:nth-child(even){margin-top:38px}
+.msg-nome{display:block;font-size:13px;font-weight:700;color:var(--ouro);margin-bottom:5px}
+.msg p{font-size:15.6px;line-height:1.58;color:var(--tinta);max-width:none}
+.msg p strong{font-weight:700}
+.msg-via{display:block;text-align:right;font-size:11px;color:var(--tinta-3);margin-top:6px}
+
+.digitando{position:absolute;left:18px;top:42px;display:flex;gap:5px;opacity:0;pointer-events:none}
+.digitando i{
+  width:7px;height:7px;border-radius:50%;background:var(--tinta-3);
+  animation:pisca 1.1s ease-in-out infinite;
 }
-.relato cite em{font-style:normal;color:var(--ouro)}
+.digitando i:nth-child(2){animation-delay:.15s}
+.digitando i:nth-child(3){animation-delay:.3s}
+@keyframes pisca{0%,60%,100%{opacity:.25;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+
+/* Sequência de entrada. A classe .anima só entra via JS e sem movimento
+   reduzido: sem script, as mensagens aparecem prontas. */
+.anima .msg{opacity:0;transform:translateY(18px) scale(.96);
+  transition:opacity .45s ease,transform .55s cubic-bezier(.2,.8,.2,1);
+  transition-delay:calc(var(--i,0) * 420ms)}
+.anima .msg blockquote,.anima .msg-via{opacity:0;
+  transition:opacity .4s ease;transition-delay:calc(var(--i,0) * 420ms + 750ms)}
+.anima .digitando{opacity:1;transition:opacity .2s ease;
+  transition-delay:calc(var(--i,0) * 420ms + 700ms)}
+.anima.visto .msg{opacity:1;transform:none}
+.anima.visto .msg blockquote,.anima.visto .msg-via{opacity:1}
+.anima.visto .digitando{opacity:0}
+.anima.visto .digitando i{animation-iteration-count:3}
+
+.relatos-ctrl{display:flex;align-items:center;gap:10px;margin-top:4px}
+.ctrl{
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--linha-2);
+  background:transparent;color:var(--tinta);font-size:17px;line-height:1;cursor:pointer;
+  transition:background .18s,color .18s,border-color .18s;
+}
+.ctrl:hover{background:var(--tinta);border-color:var(--tinta);color:var(--papel)}
+.ctrl:focus-visible{outline:2px solid var(--ouro);outline-offset:3px}
 .relatos-dica{
   font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-3);
-  margin-top:16px;
+  margin-left:10px;
 }
-@media(min-width:1040px){.relatos-dica{display:none}}
 @media(max-width:640px){
-  .relato{flex:0 0 82%;padding:26px 24px 26px 0}
-  .relato p{font-size:19px}
+  .msg{width:78vw;max-width:320px;margin-right:16px}
+  .msg:nth-child(even){margin-top:26px}
+  .msg p{font-size:15.2px}
+  .relatos-dica{font-size:11px;margin-left:6px}
 }
 
 /* ---------- dúvida central ---------- */
@@ -305,22 +346,6 @@ section{padding:clamp(72px,9vw,124px) 0}
 .compromissos-claro li::before{
   content:"";position:absolute;left:0;top:25px;width:11px;height:1px;background:var(--ouro);
 }
-
-/* ---------- números ---------- */
-.numeros{
-  display:grid;grid-template-columns:1fr 1fr;gap:0;margin:32px 0 0;
-  border-top:1px solid rgba(255,255,255,.12);
-}
-@media(min-width:620px){.numeros{grid-template-columns:repeat(4,1fr)}}
-.numeros>div{padding:18px 16px 18px 0;border-bottom:1px solid rgba(255,255,255,.12)}
-.numeros dt{
-  font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--ouro-cl);font-weight:700;margin-bottom:7px;
-}
-.numeros dd{
-  font-family:var(--disp);font-size:19px;font-weight:600;color:#fff;line-height:1.2;
-}
-.sec-escura .numeros+.btn{margin-top:34px}
 
 /* ---------- duplo benefício — composição comparativa ---------- */
 .comparativo{
@@ -392,26 +417,67 @@ section{padding:clamp(72px,9vw,124px) 0}
 .etapa h3{font-size:21px;line-height:1.25;margin-bottom:7px}
 .etapa p{font-size:15.6px;line-height:1.7;color:var(--tinta-2);max-width:52ch}
 
-/* ---------- sobre a advogada ---------- */
-.sobre-grid{display:grid;gap:clamp(36px,5vw,76px);align-items:center}
-@media(min-width:900px){.sobre-grid{grid-template-columns:.86fr 1fr}}
-.retrato{position:relative}
-/* Existe uma única fotografia. Para não repetir o mesmo enquadramento duas
-   vezes na página, aqui o recorte é quadrado e mais aberto que o do hero. */
+/* ---------- sobre a advogada ----------
+   Foto à esquerda em retrato 4/5, com selo da OAB sobreposto e uma moldura
+   dourada deslocada que "se abre" quando a seção entra na tela. Texto à
+   direita fechando com três selos: OAB, foco e atendimento online. */
+.sobre-grid{display:grid;gap:clamp(44px,6vw,92px);align-items:center}
+@media(min-width:900px){.sobre-grid{grid-template-columns:minmax(0,.8fr) 1fr}}
+
+.retrato{position:relative;isolation:isolate;max-width:460px}
 .retrato img{
-  width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;object-position:center 30%;
-  border-radius:2px;
+  width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 22%;
+  border-radius:12px;box-shadow:0 34px 60px -34px rgba(22,22,26,.45);
 }
-.retrato figcaption{
-  margin-top:18px;padding-top:16px;border-top:2px solid var(--ouro-cl);
+.retrato::before{
+  content:"";position:absolute;inset:0;z-index:-1;border:1px solid var(--ouro);
+  border-radius:12px;transform:translate(18px,18px);
 }
-.retrato figcaption b{
-  font-family:var(--disp);font-size:19px;font-weight:600;display:block;
-  line-height:1.25;color:#fff;
+.retrato-selo{
+  position:absolute;right:-18px;bottom:30px;
+  background:var(--tinta);color:#fff;padding:13px 20px 12px;border-radius:8px;
+  box-shadow:0 18px 34px -16px rgba(22,22,26,.55);
 }
-.retrato figcaption span{
-  display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ouro-cl);font-weight:700;margin-top:7px;
+.retrato-selo b{font-family:var(--disp);font-size:20px;font-weight:600;display:block;line-height:1.1}
+.retrato-selo span{
+  display:block;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ouro-cl);font-weight:700;margin-top:4px;
+}
+
+.sobre-linha{
+  margin-top:20px;padding:2px 0 2px 16px;border-left:2px solid var(--ouro);
+  font-size:14.6px;line-height:1.55;font-weight:700;color:var(--tinta-2);
+}
+.sobre-txt>p:not(.sobre-linha){
+  font-size:16.5px;line-height:1.78;color:var(--tinta-2);margin-top:18px;max-width:56ch;
+}
+.selos{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.selos li{
+  display:inline-flex;align-items:center;gap:10px;padding:10px 18px 10px 15px;
+  border-radius:999px;background:var(--ouro-fr);
+  font-size:13.6px;font-weight:700;line-height:1.2;color:var(--tinta);
+}
+.selos li::before{
+  content:"";width:10px;height:5px;flex-shrink:0;margin-top:-3px;
+  border:solid var(--ouro);border-width:0 0 1.6px 1.6px;transform:rotate(-45deg);
+}
+.sobre .acao-secao{margin-top:34px}
+
+/* entrada: moldura desliza para fora da foto, selo sobe */
+.js .sobre-grid .retrato::before{transform:none;
+  transition:transform 1s cubic-bezier(.2,.8,.2,1) .35s}
+.js .sobre-grid.in .retrato::before{transform:translate(18px,18px)}
+.js .sobre-grid .retrato-selo{opacity:0;transform:translateY(14px);
+  transition:opacity .5s ease .7s,transform .6s cubic-bezier(.2,.8,.2,1) .7s}
+.js .sobre-grid.in .retrato-selo{opacity:1;transform:none}
+
+@media(max-width:640px){
+  .retrato{max-width:none;margin-right:12px}
+  .retrato-selo{right:-10px;bottom:22px;padding:11px 16px 10px}
+  .retrato-selo b{font-size:18px}
+  .retrato::before,.js .sobre-grid.in .retrato::before{transform:translate(12px,12px)}
+  .sobre-txt>p:not(.sobre-linha){font-size:16px}
+  .selos li{font-size:13px;padding:9px 15px 9px 13px}
 }
 .autoridade{
   font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
@@ -504,9 +570,61 @@ section{padding:clamp(72px,9vw,124px) 0}
 body.modal-aberto .barra-fixa{transform:translateY(110%)}
 
 /* ---------- reveal ---------- */
-.reveal{opacity:0;transform:translateY(14px);
-  transition:opacity .55s ease var(--d,0ms),transform .55s ease var(--d,0ms)}
+.reveal{opacity:0;transform:translateY(22px);
+  transition:opacity .7s ease var(--d,0ms),transform .8s cubic-bezier(.2,.8,.2,1) var(--d,0ms)}
 .reveal.in{opacity:1;transform:none}
+
+/* ---------- movimento ----------
+   Tudo aqui é transform/opacity/width de filete e desliga com
+   prefers-reduced-motion (regra no fim do arquivo). */
+
+/* hero: entrada em cascata e o sublinhado se desenha sob o termo-chave */
+.hero-texto>*{animation:sobe .85s cubic-bezier(.2,.8,.2,1) both}
+.hero-texto>:nth-child(1){animation-delay:.05s}
+.hero-texto>:nth-child(2){animation-delay:.16s}
+.hero-texto>:nth-child(3){animation-delay:.32s}
+.hero-texto>:nth-child(4){animation-delay:.44s}
+.hero-texto>:nth-child(5){animation-delay:.56s}
+@keyframes sobe{from{opacity:0;transform:translateY(20px)}}
+.hero h1 em::after{transform-origin:left;animation:risca 1s cubic-bezier(.6,0,.2,1) .8s both}
+@keyframes risca{from{transform:scaleX(0)}}
+
+/* CTA que abre o quiz: seta que avança no hover */
+.btn[data-quiz]::after{content:"\2192";display:inline-block;transition:transform .22s ease}
+.btn[data-quiz]:hover::after{transform:translateX(5px)}
+
+/* casos: filete dourado se desenha no topo de cada um ao aparecer */
+.caso{position:relative}
+.caso::before{
+  content:"";position:absolute;left:0;top:-1px;height:2px;width:0;background:var(--ouro);
+  transition:width .7s cubic-bezier(.2,.8,.2,1) calc(var(--d,0ms) + 250ms);
+}
+.caso.in::before{width:44px}
+.caso:hover::before{width:100%;transition-delay:0ms}
+.caso h3{transition:color .2s}
+.caso:hover h3{color:var(--ouro)}
+
+/* comparativo: numeral sobe e o estado jurídico entra depois */
+.via-ordem{transition:transform .8s cubic-bezier(.2,.8,.2,1) calc(var(--d,0ms) + 150ms)}
+.via.reveal:not(.in) .via-ordem{transform:translateY(16px)}
+
+/* etapas: o filete de cada uma se preenche conforme a rolagem chega nela */
+.etapa{position:relative}
+.etapa::before{
+  content:"";position:absolute;left:0;top:-1px;height:1px;width:0;background:var(--ouro);
+  transition:width 1s cubic-bezier(.2,.8,.2,1);
+}
+.etapa.ativa::before{width:100%}
+.js .etapa-n{color:var(--linha-2);transition:color .6s ease}
+.js .etapa.ativa .etapa-n{color:var(--ouro)}
+
+/* FAQ: resposta desliza ao abrir */
+.faq details[open] .resp{animation:abre .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes abre{from{opacity:0;transform:translateY(-8px)}}
+
+/* compromissos: traço dourado cresce no hover */
+.compromissos-claro li::before{transition:width .25s ease}
+.compromissos-claro li:hover::before{width:18px}
 
 /* ==========================================================================
    QUIZ — mesma linguagem editorial, sem alterar comportamento
@@ -689,8 +807,6 @@ body.modal-aberto .barra-fixa{transform:translateY(110%)}
   .caso h3{font-size:18px}
   .duvida-central h2{font-size:clamp(25px,6.4vw,32px)}
   .duvida-central p{font-size:16px}
-  .numeros>div{padding:15px 12px 15px 0}
-  .numeros dd{font-size:17px}
   .acao-secao{flex-direction:column;align-items:stretch;gap:12px}
   .acao-secao .btn{width:100%}
   .acao-secao span{text-align:center}

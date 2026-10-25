@@ -66,12 +66,12 @@ Hero .................. chamada + promessa (dois salários) + CTA + atalho Whats
   faixa: base legal (Lei 8.213, arts. 71 a 73)
 Quem tem direito ...... 6 situações em que a mãe se reconhece
   faixa: período de graça (art. 15)
-Relatos ............... 4 depoimentos reais, faixa deslizante
+Relatos ............... 4 depoimentos reais como mensagens de WhatsApp, em faixa contínua
 O benefício ........... comparativo de 2 vias (CLT x contribuinte individual) + ressalva
 Dúvida central ........ "Isso é legal? Posso ter algum problema?"
   faixa: prazo de 5 anos (art. 103)
 Atendimento ........... 4 compromissos + 4 etapas
-A advogada ............ retrato + texto + números (OAB, alcance, horário, atuação)
+A advogada ............ retrato com selo OAB + "Prazer, sou a Halia" + 3 selos + CTA
 Dúvidas ............... 5 perguntas
 Rodapé ................ navegação, contato, institucional, bloco legal
 [ Barra fixa de CTA — mobile, entra ao sair do hero ]
@@ -236,6 +236,7 @@ lista `PERMITIDOS`.
 | `scroll_depth` | 25/50/75/100% | `profundidade` | `profundidade` |
 | `faq_open` | Abrir uma pergunta | `pergunta` | — |
 | `consentimento` | Aceite ou recusa de cookies | `escolha` | só dataLayer |
+| `relatos_interacao` | Arrastar ou usar as setas dos relatos (1ª vez por gesto) | `origem` (`arrastar`/`seta`) | só dataLayer |
 
 Todos levam também `utm_source`, `utm_campaign` e `utm_content`.
 
@@ -283,6 +284,22 @@ risco de publicidade irregular além de queimar confiança.
 - Reveal via `IntersectionObserver`, sem biblioteca
 - Zero dependência externa além das fontes e do Pixel
 - `prefers-reduced-motion` desliga animações e transições
+
+### Movimento
+
+- **Hero:** entrada em cascata; o sublinhado de "dois salários-maternidade" se desenha
+- **Relatos:** cada balão chega com "digitando…"; depois a faixa rola sozinha (28 px/s) em loop.
+  Pausa com o mouse em cima e fora da tela; arrasta com dedo ou mouse; setas e teclado avançam
+  uma mensagem. Os clones do loop ficam com `aria-hidden`
+- **Casos:** filete dourado se desenha no topo de cada um; estende no hover
+- **Etapas:** acendem uma a uma quando chegam a ~70% da altura da tela
+- **A advogada:** moldura dourada desliza para fora da foto, selo da OAB e selos entram em sequência
+- **FAQ:** resposta desliza ao abrir · **CTAs do quiz:** seta avança no hover
+
+Os estados iniciais das animações novas (relatos, etapas, foto da advogada) ficam sob a classe
+`.js` ou `.anima`, postas pelo script. Os blocos com `.reveal` dependem do script para aparecer,
+como já era antes. `prefers-reduced-motion` desliga tudo, inclusive a rolagem
+automática dos relatos.
 
 **Menu escondido no mobile.** Numa LP de tráfego pago, link de navegação é rota de fuga e custa
 espaço na primeira dobra. O CTA do header também sai no mobile — a barra fixa cumpre o papel.

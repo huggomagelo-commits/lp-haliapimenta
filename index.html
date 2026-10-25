@@ -68,7 +68,7 @@
 </section>
 
 <div class="faixa-lei">
-  <div class="wrap">
+  <div class="wrap reveal">
     <span>Base legal</span>
     <p>Salário-maternidade: <strong>Lei nº 8.213/1991, arts. 71 a 73</strong>. Duração de 120 dias,
     pagos pelo INSS ou pela empresa conforme o vínculo.</p>
@@ -122,7 +122,7 @@
 </section>
 
 <div class="faixa-lei">
-  <div class="wrap">
+  <div class="wrap reveal">
     <span>Base legal</span>
     <p>Período de graça: <strong>Lei nº 8.213/1991, art. 15</strong>. Mantém a qualidade de
     segurada por até 12 meses após o fim das contribuições, prazo que pode ser maior em algumas
@@ -131,38 +131,58 @@
 </div>
 
 <!-- ===================== 3. RELATOS ===================== -->
-<section id="relatos">
+<section id="relatos" class="relatos">
   <div class="wrap reveal">
     <div class="regua"></div>
     <span class="eyebrow">Relatos de clientes</span>
     <h2 class="tit">Mães que já passaram por isso</h2>
+  </div>
 
-    <div class="relatos-faixa" id="relatosFaixa">
-      <blockquote class="relato">
-        <p>“Foi muito maravilhoso e gratificante trabalhar com a Matos Pimenta Advocacia, foi tudo
-        tranquilo, <strong>me deram uma confiança muito boa</strong>. Sou muito grata por me
-        ajudarem.”</p>
-        <cite>Kawanny V.<em>WhatsApp</em></cite>
-      </blockquote>
+  <!-- Mensagens transcritas dos prints, em formato de conversa. O script clona a
+       faixa para o loop contínuo; os clones ficam fora da árvore de acessibilidade. -->
+  <div class="relatos-trilho" id="relatosTrilho" tabindex="0" role="region"
+       aria-roledescription="carrossel" aria-label="Relatos de clientes. Use as setas para navegar.">
+    <div class="chat-faixa" id="relatosFaixa">
+      <figure class="msg">
+        <figcaption class="msg-nome">Kawanny V.</figcaption>
+        <blockquote><p>Foi muito maravilhoso e gratificante trabalhar com a Matos Pimenta Advocacia,
+        foi tudo tranquilo, <strong>me deram uma confiança muito boa</strong>. Sou muito grata por me
+        ajudarem.</p></blockquote>
+        <span class="msg-via">via WhatsApp</span>
+        <span class="digitando" aria-hidden="true"><i></i><i></i><i></i></span>
+      </figure>
 
-      <blockquote class="relato">
-        <p>“Foi excelente. <strong>Entregaram um trabalho perfeito</strong> e me ajudaram muito.”</p>
-        <cite>Selenny<em>WhatsApp</em></cite>
-      </blockquote>
+      <figure class="msg">
+        <figcaption class="msg-nome">Selenny</figcaption>
+        <blockquote><p>Foi excelente. <strong>Entregaram um trabalho perfeito</strong> e me ajudaram
+        muito.</p></blockquote>
+        <span class="msg-via">via WhatsApp</span>
+        <span class="digitando" aria-hidden="true"><i></i><i></i><i></i></span>
+      </figure>
 
-      <blockquote class="relato">
-        <p>“Muito obrigada pelo atendimento, amei. <strong>Vocês são umas pessoas incríveis</strong>,
-        obrigada por todo carinho e paciência.”</p>
-        <cite>Nathalia B.<em>WhatsApp</em></cite>
-      </blockquote>
+      <figure class="msg">
+        <figcaption class="msg-nome">Nathalia B.</figcaption>
+        <blockquote><p>Muito obrigada pelo atendimento, amei. <strong>Vocês são umas pessoas
+        incríveis</strong>, obrigada por todo carinho e paciência.</p></blockquote>
+        <span class="msg-via">via WhatsApp</span>
+        <span class="digitando" aria-hidden="true"><i></i><i></i><i></i></span>
+      </figure>
 
-      <blockquote class="relato">
-        <p>“Foi maravilhosa. <strong>O melhor atendimento.</strong>”</p>
-        <cite>Amanda G.<em>WhatsApp</em></cite>
-      </blockquote>
+      <figure class="msg">
+        <figcaption class="msg-nome">Amanda G.</figcaption>
+        <blockquote><p>Foi maravilhosa. <strong>O melhor atendimento.</strong></p></blockquote>
+        <span class="msg-via">via WhatsApp</span>
+        <span class="digitando" aria-hidden="true"><i></i><i></i><i></i></span>
+      </figure>
     </div>
+  </div>
 
-    <p class="relatos-dica" aria-hidden="true">Arraste para ver todos</p>
+  <div class="wrap">
+    <div class="relatos-ctrl">
+      <button type="button" class="ctrl" data-relatos="-1" aria-label="Relato anterior">&larr;</button>
+      <button type="button" class="ctrl" data-relatos="1" aria-label="Próximo relato">&rarr;</button>
+      <span class="relatos-dica" aria-hidden="true">Arraste para o lado ou use as setas</span>
+    </div>
 
     <p class="nota-legal">Relatos espontâneos sobre a experiência de atendimento, publicados com
     autorização das clientes. Não constituem garantia de resultado: a concessão do benefício
@@ -225,7 +245,7 @@
 </section>
 
 <div class="faixa-lei">
-  <div class="wrap">
+  <div class="wrap reveal">
     <span>Base legal</span>
     <p>Prazo para pedir: <strong>Lei nº 8.213/1991, art. 103</strong>. O direito ao benefício
     prescreve em cinco anos contados do nascimento.</p>
@@ -290,42 +310,51 @@
 </section>
 
 <!-- ===================== 6. QUEM RESOLVE ===================== -->
-<section id="advogada" class="sec-escura">
+<section id="advogada" class="sobre sec-papel2">
   <div class="wrap">
     <div class="sobre-grid reveal">
       <figure class="retrato">
         <img src="img/halia.jpg" width="707" height="884" loading="lazy" decoding="async"
              alt="Dra. Halia Georgete Lima Pimenta, advogada previdenciária">
-        <figcaption>
-          <b>Dra. Halia Georgete Lima Pimenta</b>
-          <span>Advogada · OAB/MA 19.117</span>
+        <figcaption class="retrato-selo">
+          <b>OAB/MA 19.117</b>
+          <span>Advogada</span>
         </figcaption>
       </figure>
 
-      <div>
+      <div class="sobre-txt">
         <div class="regua"></div>
-        <span class="eyebrow">Quem resolve</span>
-        <h2 class="tit">Quem conduz o seu pedido</h2>
+        <span class="eyebrow">Sobre a advogada</span>
+        <h2 class="tit">Prazer, sou a Halia Pimenta</h2>
 
-        <p class="txt">Sou a <strong>Halia</strong>, advogada inscrita na OAB/MA sob o nº 19.117,
-        com atuação dedicada ao Direito Previdenciário. Minha equipe recebe você no WhatsApp e
-        organiza a documentação junto com você. A condução jurídica do pedido é minha.</p>
+        <p class="sobre-linha">Dra. Halia Georgete Lima Pimenta · OAB/MA 19.117 · Direito
+        Previdenciário</p>
 
-        <dl class="numeros">
-          <div><dt>OAB/MA</dt><dd>19.117</dd></div>
-          <div><dt>Atendimento</dt><dd>Todo o Brasil</dd></div>
-          <div><dt>Resposta</dt><dd>Seg a sex, 8h às 18h</dd></div>
-          <div><dt>Atuação</dt><dd>Previdenciário</dd></div>
-        </dl>
+        <p>Advogada inscrita na OAB/MA sob o nº 19.117, com atuação dedicada ao Direito
+        Previdenciário e foco em salário-maternidade. Meu trabalho é cuidar para que mães e futuras
+        mães recebam o benefício a que têm direito, com atendimento próximo e sem juridiquês.</p>
 
-        <button type="button" class="btn" data-quiz="advogada">Verificar minha situação</button>
+        <p>Cada caso começa pela leitura do seu histórico no INSS. Minha equipe recebe você no
+        WhatsApp e organiza a documentação junto com você. A condução jurídica do pedido é minha,
+        do primeiro contato até a decisão.</p>
+
+        <ul class="selos">
+          <li>OAB/MA 19.117</li>
+          <li>Foco em salário-maternidade</li>
+          <li>Atendimento 100% online</li>
+        </ul>
+
+        <div class="acao-secao">
+          <button type="button" class="btn" data-quiz="advogada">Verificar minha situação</button>
+          <span>Atendimento de segunda a sexta, das 8h às 18h</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===================== 7. DÚVIDAS ===================== -->
-<section id="duvidas" class="faq sec-papel2">
+<section id="duvidas" class="faq">
   <div class="wrap reveal">
     <div class="regua"></div>
     <span class="eyebrow">Perguntas frequentes</span>
