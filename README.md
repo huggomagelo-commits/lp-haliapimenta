@@ -3,13 +3,14 @@
 > Landing page de direct response, mobile first, com o quiz como ferramenta central de conversão
 > e qualificação. Dados do cliente e pendências em `DADOS-CLIENTE.md` (fora do repositório).
 
-Landing page de **direct response**, mobile first, com o quiz como ferramenta central de
-conversão e qualificação.
+No ar em **https://lp-haliapimenta.vercel.app** · repositório
+`github.com/huggomagelo-commits/lp-haliapimenta` · deploy automático a cada push na `main`.
 
 | Arquivo | O que é |
 |---|---|
 | `index.html` | A página |
-| `styles.css` | Estilos |
+| `styles.css` | Estilos (também usado pelas páginas legais) |
+| `legal.css` | Tipografia de documento das páginas legais |
 | `script.js` | Quiz, UTM, rastreamento, interações |
 | `politica-privacidade.html` | Política de Privacidade (LGPD) |
 | `termos-de-uso.html` | Termos de Uso |
@@ -24,21 +25,21 @@ do repositório por conter dados do cliente — está apenas na pasta local.
 
 ## Deploy
 
-Repositório git já inicializado em `main`, com o primeiro commit pronto. O `.gitignore` deixa de
-fora a documentação interna (`ESTRUTURA.md`, `COPY.md`, `DADOS-CLIENTE.md`, `DESIGN.md`), a pasta
-`.claude/` e as cópias soltas das imagens na raiz. Vão para o servidor 10 arquivos, 268 KB.
+Sem build step — é HTML, CSS e JS estáticos. O `.gitignore` deixa de fora a documentação
+interna, a pasta `.claude/` e as cópias soltas das imagens na raiz.
 
-**1.** Criar um repositório vazio no GitHub — sem README, sem .gitignore, sem licença.
+Na Vercel: projeto importado do GitHub, framework **Other**, sem build command, output na raiz.
+Publicar é só `git commit` + `git push` na `main`.
 
-**2.** Na pasta `D:\LP`:
+### Onde o projeto é editado
 
-```bash
-git remote add origin https://github.com/SEU-USUARIO/NOME-DO-REPO.git
-git push -u origin main
-```
+| Máquina | Pasta | Observação |
+|---|---|---|
+| PC do escritório | `D:\LP` | Git e Python instalados; preview `lp` do `.claude/launch.json` |
+| Notebook | `OneDrive\Área de Trabalho\design\summit\TNF\LP Halia` | **Sem Git e sem Python.** Preview `lp-notebook` (servidor em PowerShell, porta 8901). Para publicar daqui, instalar o Git: `winget install Git.Git` |
 
-**3.** Na Vercel: *Add New → Project → Import Git Repository*. Framework **Other**, sem build
-command, output directory na raiz.
+As duas pastas apontam para o mesmo repositório. **Antes de editar numa máquina, `git pull`** —
+senão o push da outra conflita.
 
 ### Cache
 
@@ -47,44 +48,46 @@ encontrar o CSS antigo depois de um deploy, e a página quebra para quem já vis
 `max-age=0, must-revalidate`: o navegador manda um condicional e recebe `304` quando nada mudou.
 Imagens ficam em 1 dia, já que a foto e a logo ainda podem ser trocadas.
 
+`cleanUrls: true` serve `politica-privacidade.html` em `/politica-privacidade`; os links internos
+com `.html` são redirecionados e mantêm a query string (UTM).
+
 > ⚠️ **O `vercel.json` não aceita propriedades fora do schema.** Uma chave `comment` dentro de
 > `headers[]` faz a validação falhar e o deploy não acontece — silenciosamente, com check `0/1`
 > no commit do GitHub e o site continuando no build anterior. JSON não tem comentários; a
 > documentação das regras mora aqui.
 
-Sem build step — é HTML, CSS e JS estáticos.
-
 ---
 
 ## 1. Hierarquia
 
-Reorganizada para conversão. A identidade visual não mudou.
-
 ```
-Marquee → Header (só marca no mobile)
-Hero .................. promessa + prazo + CTA        ← dobra
-Duplo benefício ....... por que pode haver dois
-Depoimentos ........... 4 relatos reais de clientes
-Como funciona ......... 3 passos
-A advogada ............ Dra. Halia + provas curtas
-Dúvidas ............... 7 objeções
-CTA final
-Rodapé
+Header ................ marca + menu + CTA (no mobile, só a marca)
+Hero .................. chamada + promessa (dois salários) + CTA + atalho WhatsApp   ← dobra
+  faixa: base legal (Lei 8.213, arts. 71 a 73)
+Quem tem direito ...... 6 situações em que a mãe se reconhece
+  faixa: período de graça (art. 15)
+Relatos ............... 4 depoimentos reais, faixa deslizante
+O benefício ........... comparativo de 2 vias (CLT x contribuinte individual) + ressalva
+Dúvida central ........ "Isso é legal? Posso ter algum problema?"
+  faixa: prazo de 5 anos (art. 103)
+Atendimento ........... 4 compromissos + 4 etapas
+A advogada ............ retrato + texto + números (OAB, alcance, horário, atuação)
+Dúvidas ............... 5 perguntas
+Rodapé ................ navegação, contato, institucional, bloco legal
 [ Barra fixa de CTA — mobile, entra ao sair do hero ]
 ```
 
-**Saiu:** "Quem tem direito" (os painéis viraram o próprio quiz), "Por que deixam de receber",
-"Pedido negado" como seção (virou ramo do quiz + FAQ), "Por que contar com a gente" (virou lista
-curta dentro de "A advogada"). FAQ de 11 para 7. Passos de 4 para 3.
+Toda seção termina com o mesmo CTA, "Verificar minha situação", que abre o quiz. Cada botão tem
+um `data-quiz` diferente, que vira o parâmetro `origem` no rastreamento.
 
-**Entrou:** barra fixa de CTA no mobile, chips de prova no hero, tela de análise no quiz.
+O menu do header funciona também como **sitelinks** nos anúncios.
 
 ---
 
 ## 2. O quiz
 
-**Sem número fixo de perguntas.** O fluxo ramifica, então a página promete
-*"leva menos de 1 minuto"* e o progresso aparece como **"Análise 45% concluída"**.
+**Sem número fixo de perguntas.** O fluxo ramifica — de 1 a 4 perguntas —, então a página promete
+*"leva menos de um minuto"* e o progresso aparece como **"Análise 45% concluída"**.
 
 ```
 Quando o bebê nasceu/vai nascer?            15%
@@ -104,23 +107,44 @@ Quando o bebê nasceu/vai nascer?            15%
       Resultado                            100%
 ```
 
-São **3 ou 4 perguntas** conforme o caminho. As duas perguntas extras não existem por volume:
+As perguntas extras não existem por volume:
 
-- **"Para quando é o parto?"** segmenta urgência. Resposta "neste mês" marca o lead como
-  prioritário na tela final e no evento `qualified`.
-- **"Tem a carta de negativa?"** define se a Dra. Halia consegue ler o motivo real da recusa já na
+- **"Para quando é o parto?"** segmenta urgência. Resposta "neste mês" mostra o aviso de
+  prioridade na tela final e marca `urgente` no evento `qualified`.
+- **"Tem a carta de negativa?"** define se a equipe consegue ler o motivo real da recusa já na
   primeira conversa.
 
-**UX implementada:** uma pergunta por tela · cards de 68px no mobile · avanço automático no
-clique · nenhum dropdown · nenhum campo de digitação · botão Voltar com histórico real ·
-transição de 260ms entre telas · modal em `100dvh` (não quebra com a barra do navegador).
+As três saídas levam ao Instagram do escritório (`@m.p_advocacia`), que fala dos demais
+benefícios do INSS.
+
+**UX:** uma pergunta por tela · alvos de 64–66px · avanço automático no clique · nenhum dropdown
+· nenhum campo de digitação · botão Voltar com histórico real · modal em `100dvh` no mobile.
 
 ### A tela "Analisando"
 
-Três checagens aparecem em sequência antes do resultado (~1,7s). Não é enfeite: os itens
-descrevem a avaliação que de fato acontece com as respostas — prazo de 5 anos, vínculo,
-qualidade de segurada. Separa `quiz_complete` de `qualified` e aumenta o valor percebido da
-resposta que vem depois.
+Três checagens aparecem em sequência antes do resultado (~1,7s). Os itens descrevem a avaliação
+que de fato acontece com as respostas — prazo de 5 anos, vínculo, qualidade de segurada. Separa
+`quiz_complete` de `qualified`.
+
+### A mensagem do WhatsApp
+
+O resultado monta a mensagem com as respostas, para que a equipe não precise perguntar de novo:
+
+```
+Olá! Vim pelo site e fiz a verificação.
+
+Bebê: nasceu há menos de 1 ano
+Na época: MEI, autônoma ou pagava por conta
+INSS: pedi e foi negado
+Carta de negativa: tenho a carta em mãos
+
+Quero saber se tenho direito ao salário-maternidade.
+
+Origem: facebook / nome-da-campanha / conjunto / anuncio
+```
+
+O horário mostrado abaixo do botão muda conforme o dia e a hora (seg–sex, 8h–18h, no relógio do
+aparelho de quem acessa).
 
 ---
 
@@ -132,21 +156,14 @@ são propagados nos links internos.
 
 **Se a URL traz qualquer parâmetro de campanha, o conjunto é substituído — não mesclado.**
 Mesclar fazia o `utm_content` de um anúncio antigo vazar para a atribuição do anúncio atual.
-Foi um bug real, pego no teste.
 
 ### ⚠️ A UTM precisa estar na URL do anúncio
 
-**Chrome, Brave, Firefox e Safari apagam o `fbclid` da URL antes da página carregar.** Testado
-na própria LP: enviando `?fbclid=ABC123&teste=xyz`, o que chega é `?teste=xyz`.
-
-Se o anúncio mandar só o `fbclid`, não chega nada — e o navegador in-app do Instagram
-normalmente também não envia referrer. Sem UTM explícita, tráfego pago vira "sem origem".
-
-**Por isso a URL do anúncio precisa carregar as UTMs**, sempre.
+**Chrome, Brave, Firefox e Safari apagam o `fbclid` da URL antes da página carregar.** Se o
+anúncio mandar só o `fbclid`, não chega nada — e o navegador in-app do Instagram normalmente
+também não envia referrer.
 
 ### Dedução de origem quando falta UTM
-
-Quando `utm_source` não vem na URL, a origem é deduzida em cascata:
 
 | Situação | Resultado |
 |---|---|
@@ -157,22 +174,12 @@ Quando `utm_source` não vem na URL, a origem é deduzida em cascata:
 | Tem referrer | `<dominio> / referral` |
 | Nada identificável | `desconhecido / desconhecido` |
 
-A detecção por user agent é o que salva o caso mais comum: anúncio do Meta aberto no navegador
-interno do app, sem fbclid e sem referrer.
-
 **"desconhecido", não "direto".** Rotular de direto o que não se consegue identificar faz
-tráfego pago parecer orgânico no relatório — é pior que admitir a ignorância.
+tráfego pago parecer orgânico no relatório.
 
 ### ⚠️ A origem aparece na mensagem do WhatsApp
 
-A última linha da mensagem fica assim:
-
-```
-Origem: facebook / maternidade-frio / mulheres-25-40 / criativo-dobro
-```
-
-É o que permite atribuir a conversa a um anúncio. **Mas a lead lê isso.** Se as campanhas se
-chamarem `frio-dor-medo-v3`, ela vê. Duas opções:
+É o que permite atribuir a conversa a um anúncio. **Mas a lead lê isso.** Duas opções:
 
 1. Nomear campanhas de forma apresentável — recomendado
 2. `CFG.origemNaMensagem = false` no `script.js`, e atribuir só pelo Pixel
@@ -189,58 +196,69 @@ Anúncio pode abrir o quiz direto com `?quiz=1` ou `#quiz`.
 
 ## 4. Rastreamento
 
-`CFG.pixelId` no `script.js` — Pixel **1887940685517084**. Todo evento vai para o
-`dataLayer` (GTM) e para o `fbq` (Pixel).
+`CFG.pixelId` no `script.js` — Pixel **1887940685517084**. Todo evento vai para o `dataLayer`
+com todos os parâmetros, e para o `fbq` (Pixel) **só com parâmetros de funil**.
 
-### Eventos que você pediu
+### O que o Meta recebe — e o que não recebe
 
-| Evento | Quando | Parâmetros |
-|---|---|---|
-| `page_view` | Carregamento | — |
-| `quiz_start` | Abertura do quiz | `origem` (qual CTA) |
-| `quiz_step` | Cada resposta | `etapa`, `pergunta`, `resposta` |
-| `quiz_complete` | Fim da análise | `etapas` |
-| `qualified` | Resultado positivo | `perfil`, `vinculo`, `urgente` |
-| `unqualified` | Tela de saída | `motivo` |
-| `whatsapp_click` | Clique no WhatsApp | `origem`, `perfil` |
-| `instagram_redirect` | Clique numa saída | `motivo` |
-| `quiz_restart` | "Refazer" | `etapa` |
+O `track()` filtra os parâmetros antes de chamar o `fbq`. Passam só:
 
-### Eventos que eu adicionei
+`etapa` · `etapas` · `progresso` · `origem` · `profundidade` · `utm_source` · `utm_campaign` · `utm_content`
 
-| Evento | Por quê |
-|---|---|
-| **`quiz_abandon`** | **O mais importante da lista.** Dispara ao fechar o quiz sem concluir, com `etapa` e `progresso`. É o que mostra em qual pergunta o funil vaza. Sem ele, abandono e "nunca abriu" ficam indistinguíveis. |
-| `cta_click` | `origem` do botão que abriu o quiz (hero, barra_fixa, faq…). Diz qual seção vende. |
-| `whatsapp_bypass` | Clique no "prefiro falar direto". Se passar de ~25% dos cliques de WhatsApp, o quiz está pesado demais. |
-| `scroll_depth` | 25/50/75/100% |
-| `faq_open` | Qual objeção a pessoa abriu |
-| `consentimento` | Aceite ou recusa de cookies |
+**Nunca vão para o Meta:** a resposta de cada pergunta, o perfil (gestante/pós-parto), o vínculo,
+o motivo da saída e a pergunta do FAQ aberta. São dado de saúde ou permitem inferi-lo:
 
-Todos carregam `utm_source`, `utm_campaign` e `utm_content` junto.
+- a Política de Privacidade promete que o conteúdo das respostas não sai do navegador;
+- o Meta restringe Pixels que recebem informação de saúde, o que pode limitar a otimização da
+  campanha ou a conta de anúncios.
+
+O detalhe completo continua no `dataLayer`. Hoje não há GTM instalado, então ele não sai do
+navegador. **Se um dia instalar GTM, não repassar esses campos para o Meta nem para outra
+ferramenta.** Ao criar um parâmetro novo de evento, ele só chega ao Pixel se for incluído na
+lista `PERMITIDOS`.
+
+### Eventos
+
+| Evento | Quando | Parâmetros no dataLayer | Vai ao Meta com |
+|---|---|---|---|
+| `page_view` | Carregamento | — | — (Pixel manda `PageView`) |
+| `cta_click` | Clique num CTA do quiz | `origem` | `origem` |
+| `quiz_start` | Abertura do quiz | `origem` | `origem` |
+| `quiz_step` | Cada resposta | `etapa`, `pergunta`, `resposta` | `etapa` |
+| `quiz_complete` | Fim da análise | `etapas` | `etapas` |
+| `quiz_abandon` | Fechar o quiz sem concluir | `etapa`, `progresso` | `etapa`, `progresso` |
+| `qualified` | Resultado positivo | `perfil`, `vinculo`, `urgente` | — |
+| `unqualified` | Tela de saída | `motivo` | — |
+| `whatsapp_click` | Clique no WhatsApp | `origem`, `perfil` | `origem` |
+| `whatsapp_bypass` | "Falar no WhatsApp" do hero, sem quiz | `origem` | `origem` |
+| `instagram_redirect` | Clique numa saída | `motivo` | — |
+| `quiz_restart` | "Refazer" | `etapa` | `etapa` |
+| `scroll_depth` | 25/50/75/100% | `profundidade` | `profundidade` |
+| `faq_open` | Abrir uma pergunta | `pergunta` | — |
+| `consentimento` | Aceite ou recusa de cookies | `escolha` | só dataLayer |
+
+Todos levam também `utm_source`, `utm_campaign` e `utm_content`.
+
+**`quiz_abandon`** é o mais útil para otimizar: mostra em qual pergunta o funil vaza.
+**`whatsapp_bypass`** acima de ~25% dos cliques de WhatsApp indica quiz pesado demais.
 
 ### Eventos padrão do Meta
 
 `whatsapp_click → Lead` · `whatsapp_bypass → Lead` · `quiz_start → ViewContent`
 
-**Otimize as campanhas para `Lead`**, não para PageView.
-
-O `Lead` dispara **só quando a pessoa sai para o WhatsApp** — inclusive pelo atalho "prefiro
-falar direto", que também é lead. Chegar na tela de resultado (`qualified`) não dispara Lead:
-parte das pessoas para ali sem clicar, e contar isso como conversão ensinaria o Meta a otimizar
-para o sinal errado.
+**Otimize as campanhas para `Lead`**, não para PageView. O `Lead` dispara só quando a pessoa sai
+para o WhatsApp. Chegar na tela de resultado (`qualified`) não dispara Lead: parte das pessoas
+para ali sem clicar.
 
 ### ⚠️ Consentimento vs. volume de eventos
 
 `CFG.modoPixel = "consentimento"` (padrão): o Pixel só carrega após "Aceitar todos". É o que a
-LGPD pede e o que a nossa própria Política de Privacidade promete — mas **perde os eventos de
-quem recusa ou ignora o banner**, tipicamente 20–40%.
-
-`"imediato"` dispara no carregamento. Mais dados, menos conformidade. A decisão é do cliente,
-que é advogado. Deixei em `consentimento` porque é o padrão defensável.
+LGPD pede e o que a Política promete — mas **perde os eventos de quem recusa ou ignora o
+banner**, tipicamente 20–40%. `"imediato"` dispara no carregamento: mais dados, menos
+conformidade.
 
 Para recuperar o que o navegador bloqueia, o caminho é a **API de Conversões do Meta** (server
-side). Não implementei: exige backend, e hoje o site é estático.
+side). Não implementada: exige backend, e o site é estático.
 
 ---
 
@@ -249,79 +267,65 @@ side). Não implementei: exige backend, e hoje o site é estático.
 Só urgência real. Nada de contador regressivo ou "últimas vagas" — em site de advogado isso é
 risco de publicidade irregular além de queimar confiança.
 
-- **Prescrição de 5 anos** — no hero, no quiz e no CTA final
-- **Período de graça de 12 meses** — na FAQ
-- **Parto neste mês** — o quiz marca prioridade quando a resposta indica
-- **CTA final:** *"Cada mês que passa é um mês a menos dentro do prazo."*
+- **Prazo de 5 anos** — na chamada do hero, na faixa do art. 103 e na saída "prazo" do quiz
+- **Período de graça** — no card "grávida e desempregada" e na faixa do art. 15
+- **Parto neste mês** — o quiz mostra o aviso de prioridade quando a resposta indica
 
 ---
 
 ## 6. Performance
 
-- Fontes de **5 faces para 3** (DM Sans 400/700 + Playfair 600) — ~30KB a menos
+- Duas famílias de fonte, quatro pesos (Cormorant Garamond 500/600 + DM Sans 400/700)
 - `preload` + carregamento não bloqueante das fontes
 - `script.js` com `defer`
-- Imagem com `width`/`height`, `loading="lazy"`, `decoding="async"` — **CLS zero**
+- Imagem com `width`/`height`, `loading="lazy"`, `decoding="async"` — sem CLS
 - Scroll com `requestAnimationFrame` e listeners `passive`
 - Reveal via `IntersectionObserver`, sem biblioteca
 - Zero dependência externa além das fontes e do Pixel
-- Animações em `transform`/`opacity` (compositor), nada de `width`/`top`
-- `prefers-reduced-motion` desliga tudo
+- `prefers-reduced-motion` desliga animações e transições
 
 **Menu escondido no mobile.** Numa LP de tráfego pago, link de navegação é rota de fuga e custa
-~45px da primeira dobra. O CTA do header também sai no mobile: era redundante com o do hero e
-estourava a largura em 138px.
-
-**O botão flutuante virou barra fixa.** Dois elementos flutuando competem por área de toque.
+espaço na primeira dobra. O CTA do header também sai no mobile — a barra fixa cumpre o papel.
 
 ---
 
-## 7. Verificado no navegador
+## 7. Verificação — 25/10/2026
 
-Desktop 1534px e mobile 402/360px (via iframe — `resize_window` não funciona com a janela
-maximizada).
+Feita no site no ar e no preview local, desktop e mobile 375px.
 
-**Quiz, todos os caminhos:** grávida (3 perguntas) · pós-parto (3) · pós-parto negado (4) ·
-saída prazo · saída sem vínculo · saída antes da hora · Voltar · Refazer.
+**Quiz, todos os caminhos:** grávida · pós-parto · pós-parto negado · saída prazo · saída sem
+vínculo · saída antes da hora · Voltar · Refazer · Fechar. Mensagem do WhatsApp conferida nas
+três variações, inclusive o aviso de urgência.
 
-**Primeira dobra no mobile @402px:** header 63px · CTA em **328px**.
+**Também conferido:** zero erro no console · zero overflow horizontal em 375px · UTM capturada,
+persistida e propagada para os links legais · Pixel recebendo só parâmetros permitidos (testado
+com `fbq` simulado, sem enviar nada ao Meta) · páginas legais com o visual da LP e favicon.
 
-| | Antes | Depois |
-|---|---|---|
-| Header + marquee | 135px | 90px |
-| Topo do CTA | 544px | 328px |
+### Correções desta rodada
 
-**Também conferido:** zero erro no console · zero overflow horizontal em 360 e 402 · modal em
-387×844 sem quebrar viewport · opções com 68px de alvo · barra fixa some com o modal aberto ·
-mensagem do WhatsApp montada nas 3 variações · eventos na ordem certa.
-
-### Bugs pegos e corrigidos nesta rodada
-
-1. **UTM mesclado em vez de substituído** — `utm_content` de campanha antiga vazava para a
-   atribuição da campanha nova.
-2. **Chips do hero acima do H1 no mobile** — sem `order` explícito, caíram em `order:0` e
-   subiram na frente do título.
-3. **Menu aparecendo no mobile** — a regra estava comentada mas nunca escrita.
-4. **Header em duas linhas** — `flex-wrap:wrap` de `max-width:860px` vencia a minha regra por
-   ordem de declaração.
-5. **Overflow de 138px** — CTA do header não cabia em 402px com `nowrap`.
-6. **Botão e nota lado a lado no hero** — faltava empilhar o `.cta-bloco`.
+1. **Pixel recebia as respostas do quiz** (resposta, perfil gestante, vínculo, motivo, FAQ).
+   Agora só parâmetros de funil — ver seção 4.
+2. **Política apontava para um e-mail inexistente** como canal da LGPD. Trocado pelo WhatsApp.
+3. **Termos exibiam a nota interna "Revisão recomendada"** no site. Removida.
+4. **Política e Termos diziam "três" / "três a quatro" perguntas.** Agora "até 4".
+5. **Política citava Google Analytics, Tag Manager e Google Ads**, que não estão instalados.
+   Removidos; a tabela de cookies lista só o que existe (essenciais + Meta Pixel).
+6. **Páginas legais com o visual antigo** (Playfair, ouro claro, caixas arredondadas, Política
+   sem favicon). Agora usam o `styles.css` da LP + `legal.css`.
 
 ---
 
-## 8. Antes de subir com tráfego
+## 8. Pendências
 
 | # | Item | Trava? |
 |---|---|---|
-| 1 | **Autorização das 4 clientes** para publicar os depoimentos | 🔴 |
-| 2 | Decidir `modoPixel`: consentimento ou imediato | 🔴 |
-| 3 | E-mail profissional (o rodapé hoje tem só WhatsApp e Instagram) | 🟡 |
-| 4 | Foto de estúdio da Dra. Halia (a atual é de evento, com crachá) | 🟡 |
-| 5 | Logo em vetor (SVG) — a atual é PNG extraído de um post | 🟡 |
-| 6 | Confirmar horário de atendimento (assumido 8h–18h) | 🟡 |
-| 7 | Conferir nomes de campanha (aparecem na mensagem do WhatsApp) | 🟡 |
-| 8 | Revisão dos Termos de Uso pela própria advogada | 🟡 |
-| 9 | Alinhar R$ 6.000 da página com o valor usado nos criativos | 🟡 |
+| 1 | Decidir `modoPixel`: consentimento ou imediato (padrão atual: consentimento) | 🟡 |
+| 2 | Conferir nomes de campanha (aparecem na mensagem do WhatsApp) | 🟡 |
+| 3 | Confirmar horário de atendimento (assumido seg–sex, 8h–18h) | 🟡 |
+| 4 | E-mail profissional — opcional; hoje o canal de contato e da LGPD é o WhatsApp | 🟡 |
+| 5 | Foto de estúdio da Dra. Halia (a atual é de evento, com crachá) | 🟡 |
+| 6 | Logo em vetor (SVG) — a atual é PNG extraído de um post | 🟡 |
+| 7 | Leitura final da Política e dos Termos pela própria advogada | 🟡 |
 
-✅ Já resolvidos: WhatsApp, Instagram, Pixel (`1887940685517084`), razão social, CNPJ, endereço,
-Termos de Uso, logo, foto e depoimentos.
+✅ Já resolvidos: WhatsApp, Instagram, Pixel, razão social, CNPJ, endereço, Termos de Uso, logo,
+foto, depoimentos e **autorização das 4 clientes para publicação** (confirmada em 25/10/2026).

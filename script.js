@@ -109,7 +109,7 @@ var UTM = (function () {
     propagar: function () {
       var qs = new URLSearchParams();
       CAMPOS.forEach(function (c) { if (dados[c]) qs.set(c, dados[c]); });
-      if (![].length && qs.toString()) {
+      if (qs.toString()) {
         document.querySelectorAll('a[href$=".html"]').forEach(function (a) {
           if (a.hostname && a.hostname !== location.hostname) return;
           a.href = a.href.split("?")[0] + "?" + qs.toString();
@@ -162,6 +162,17 @@ function track(nome, params, soDataLayer) {
   window.dataLayer.push(ev);
 
   if (soDataLayer || !window.fbq) return;
+
+  /* Para o Meta vai só o que diz ONDE a pessoa está no funil, nunca O QUE ela
+     respondeu. Resposta do quiz, perfil (gestante/pós-parto), vínculo, motivo de
+     saída e pergunta do FAQ são dado de saúde ou permitem inferi-lo: a Política
+     promete não enviar, e o Meta restringe Pixel que recebe esse tipo de dado.
+     O detalhe completo continua no dataLayer, que não sai do navegador. */
+  var PERMITIDOS = ["etapa", "etapas", "progresso", "origem", "profundidade",
+                    "utm_source", "utm_campaign", "utm_content"];
+  var pm = {};
+  PERMITIDOS.forEach(function (k) { if (p[k] !== undefined) pm[k] = p[k]; });
+
   /* Lead só quando a pessoa efetivamente sai para o WhatsApp — inclusive pelo
      atalho "prefiro falar direto", que também é lead. Chegar na tela de
      resultado (qualified) não dispara Lead: muita gente para ali. */
@@ -170,8 +181,8 @@ function track(nome, params, soDataLayer) {
     whatsapp_bypass: "Lead",
     quiz_start:      "ViewContent"
   };
-  if (PADRAO[nome]) fbq("track", PADRAO[nome], p);
-  fbq("trackCustom", nome, p);
+  if (PADRAO[nome]) fbq("track", PADRAO[nome], pm);
+  fbq("trackCustom", nome, pm);
 }
 
 /* ========================================================================
